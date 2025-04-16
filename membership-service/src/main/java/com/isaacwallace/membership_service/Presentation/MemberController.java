@@ -19,17 +19,17 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping("")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<MemberResponseModel>> getAllMembers() {
         return ResponseEntity.status(HttpStatus.OK).body(this.memberService.getAllMembers());
     }
 
-    @GetMapping("{memberid}")
+    @GetMapping(value = "{memberid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MemberResponseModel> getMemberById(@PathVariable String memberid) {
         return ResponseEntity.status(HttpStatus.OK).body(this.memberService.getMemberById(memberid));
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MemberResponseModel> addMember(@RequestBody MemberRequestModel memberRequestModel) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.memberService.addMember(memberRequestModel));
     }

@@ -27,10 +27,10 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(HttpStatus.NOT_FOUND, req, ex);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(InvalidInputException.class)
     public HttpErrorInfo handleInvalidInputException(WebRequest request, Exception ex){
-        return createHttpErrorInfo(HttpStatus.BAD_REQUEST, request, ex);
+        return createHttpErrorInfo(HttpStatus.UNPROCESSABLE_ENTITY, request, ex);
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)

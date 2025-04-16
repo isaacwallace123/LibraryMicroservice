@@ -7,7 +7,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Data
 @Builder
-public class AuthorResponseModel extends RepresentationModel<AuthorResponseModel> {
+public class AuthorResponseModel {
     private String authorId;
 
     private String firstName;

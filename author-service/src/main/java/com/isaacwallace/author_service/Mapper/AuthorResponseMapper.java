@@ -20,12 +20,12 @@ public interface AuthorResponseMapper {
     AuthorResponseModel entityToResponseModel(Author author);
     List<AuthorResponseModel> entityToResponseModelList(List<Author> authors);
 
-    @AfterMapping
-    default void addLinks(@MappingTarget AuthorResponseModel authorResponseModel, Author author) {
-        Link selfLink = linkTo(methodOn(AuthorController.class).getAuthorById(author.getAuthorIdentifier().getAuthorid())).withSelfRel();
-        authorResponseModel.add(selfLink);
-
-        Link authorsLink = linkTo(methodOn(AuthorController.class).getAllAuthors()).withRel("authors");
-        authorResponseModel.add(authorsLink);
-    }
+//    @AfterMapping
+//    default void addLinks(@MappingTarget AuthorResponseModel authorResponseModel, Author author) {
+//        Link selfLink = linkTo(methodOn(AuthorController.class).getAuthorById(author.getAuthorIdentifier().getAuthorid())).withSelfRel();
+//        authorResponseModel.add(selfLink);
+//
+//        Link authorsLink = linkTo(methodOn(AuthorController.class).getAllAuthors()).withRel("authors");
+//        authorResponseModel.add(authorsLink);
+//    }
 }

@@ -19,17 +19,17 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
-    @GetMapping("")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AuthorResponseModel>> getAllAuthors() {
         return ResponseEntity.status(HttpStatus.OK).body(authorService.getAllAuthors());
     }
 
-    @GetMapping("{authorid}")
+    @GetMapping(value = "{authorid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AuthorResponseModel> getAuthorById(@PathVariable String authorid) {
         return ResponseEntity.status(HttpStatus.OK).body(authorService.getAuthorById(authorid));
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AuthorResponseModel> addAuthor(@RequestBody AuthorRequestModel authorRequestModel) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.authorService.addAuthor(authorRequestModel));
     }
@@ -39,7 +39,7 @@ public class AuthorController {
         return ResponseEntity.status(HttpStatus.OK).body(this.authorService.updateAuthor(authorid, authorRequestModel));
     }
 
-    @DeleteMapping("{authorid}")
+    @DeleteMapping(value = "{authorid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AuthorResponseModel> deleteAuthor(@PathVariable String authorid) {
         this.authorService.deleteAuthor(authorid);
 

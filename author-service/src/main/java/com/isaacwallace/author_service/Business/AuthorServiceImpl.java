@@ -8,11 +8,13 @@ import com.isaacwallace.author_service.Mapper.AuthorResponseMapper;
 import com.isaacwallace.author_service.Presentation.Models.AuthorRequestModel;
 import com.isaacwallace.author_service.Presentation.Models.AuthorResponseModel;
 import com.isaacwallace.author_service.Utils.Exceptions.InUseException;
+import com.isaacwallace.author_service.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.author_service.Utils.Exceptions.NotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -26,16 +28,37 @@ public class AuthorServiceImpl implements AuthorService {
         this.authorRequestMapper = authorRequestMapper;
     }
 
-    public List<AuthorResponseModel> getAllAuthors() {
-        return authorResponseMapper.entityToResponseModelList(authorRepository.findAll());
+    private void validateAuthorRequestModel(AuthorRequestModel model) {
+        if (model.getFirstName() == null || model.getFirstName().isBlank()) {
+            throw new InvalidInputException("Invalid firstName: " + model.getFirstName());
+        }
+        if (model.getLastName() == null || model.getLastName().isBlank()) {
+            throw new InvalidInputException("Invalid lastName: " + model.getLastName());
+        }
     }
 
-    public AuthorResponseModel getAuthorById(String authorid) {
+    private Author getAuthorObjectById(String authorid) {
+        try {
+            UUID.fromString(authorid);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidInputException("Invalid authorid: " + authorid);
+        }
+
         Author author = this.authorRepository.findAuthorByAuthorIdentifier_Authorid(authorid);
 
         if (author == null) {
             throw new NotFoundException("Unknown authorid: " + authorid);
         }
+
+        return author;
+    }
+
+    public List<AuthorResponseModel> getAllAuthors() {
+        return authorResponseMapper.entityToResponseModelList(authorRepository.findAll());
+    }
+
+    public AuthorResponseModel getAuthorById(String authorid) {
+        Author author = this.getAuthorObjectById(authorid);
 
         return this.authorResponseMapper.entityToResponseModel(author);
     }
@@ -43,15 +66,15 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorResponseModel addAuthor(AuthorRequestModel authorRequestModel) {
         Author author = this.authorRequestMapper.requestModelToEntity(authorRequestModel, new AuthorIdentifier());
 
+        this.validateAuthorRequestModel(authorRequestModel);
+
         return authorResponseMapper.entityToResponseModel(this.authorRepository.save(author));
     }
 
     public AuthorResponseModel updateAuthor(String authorid, AuthorRequestModel authorRequestModel) {
-        Author author = this.authorRepository.findAuthorByAuthorIdentifier_Authorid(authorid);
+        Author author = this.getAuthorObjectById(authorid);
 
-        if (author == null) {
-            throw new NotFoundException("Unknow authorid: " + authorid);
-        }
+        this.validateAuthorRequestModel(authorRequestModel);
 
         this.authorRequestMapper.updateEntityFromRequest(authorRequestModel, author);
 
@@ -61,11 +84,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     public void deleteAuthor(String authorid) {
-        Author author = this.authorRepository.findAuthorByAuthorIdentifier_Authorid(authorid);
-
-        if (author == null) {
-            throw new NotFoundException("Unknow authorid: " + authorid);
-        }
+        Author author = this.getAuthorObjectById(authorid);
 
         try {
             this.authorRepository.delete(author);

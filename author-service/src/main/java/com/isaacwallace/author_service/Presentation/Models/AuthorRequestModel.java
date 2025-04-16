@@ -7,7 +7,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class AuthorRequestModel extends RepresentationModel<AuthorRequestModel> {
+public class AuthorRequestModel {
     String firstName;
     String lastName;
 
