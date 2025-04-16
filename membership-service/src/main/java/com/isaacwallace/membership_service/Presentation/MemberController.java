@@ -39,7 +39,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(this.memberService.updateMember(memberid, memberRequestModel));
     }
 
-    @DeleteMapping("{memberid}")
+    @DeleteMapping(value = "{memberid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MemberResponseModel> DeleteCustomer(@PathVariable String memberid) {
         this.memberService.deleteMember(memberid);
 

@@ -30,3 +30,6 @@ app:
   membership-service:
     host: membership-service
     port: 8080
+  employee-service:
+    host: employee-service
+    port: 8080

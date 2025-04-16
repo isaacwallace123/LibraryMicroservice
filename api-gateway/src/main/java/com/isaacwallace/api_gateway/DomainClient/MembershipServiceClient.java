@@ -1,8 +1,8 @@
 package com.isaacwallace.api_gateway.DomainClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.isaacwallace.api_gateway.Membership.Presentation.Models.MembershipRequestModel;
-import com.isaacwallace.api_gateway.Membership.Presentation.Models.MembershipResponseModel;
+import com.isaacwallace.api_gateway.Services.Membership.Presentation.Models.MembershipRequestModel;
+import com.isaacwallace.api_gateway.Services.Membership.Presentation.Models.MembershipResponseModel;
 import com.isaacwallace.api_gateway.Utils.Exceptions.HttpErrorInfo;
 import com.isaacwallace.api_gateway.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.api_gateway.Utils.Exceptions.NotFoundException;
@@ -62,7 +62,7 @@ public class MembershipServiceClient {
         }
     }
 
-    public MembershipResponseModel updateMember(MembershipRequestModel membershipRequestModel, String memberid) {
+    public MembershipResponseModel updateMember(String memberid, MembershipRequestModel membershipRequestModel) {
         try {
             log.debug("membership-service URL is {}", SERVICE_BASE_URL + "/" + memberid);
 

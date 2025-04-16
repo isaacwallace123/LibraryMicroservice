@@ -1,8 +1,8 @@
 package com.isaacwallace.employee_service.Utils;
 
-import com.isaacwallace.author_service.Utils.Exceptions.HttpErrorInfo;
-import com.isaacwallace.author_service.Utils.Exceptions.InUseException;
-import com.isaacwallace.author_service.Utils.Exceptions.NotFoundException;
+import com.isaacwallace.employee_service.Utils.Exceptions.HttpErrorInfo;
+import com.isaacwallace.employee_service.Utils.Exceptions.InUseException;
+import com.isaacwallace.employee_service.Utils.Exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
