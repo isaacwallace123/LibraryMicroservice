@@ -2,6 +2,7 @@ package com.isaacwallace.membership_service.Utils;
 
 import com.isaacwallace.membership_service.Utils.Exceptions.HttpErrorInfo;
 import com.isaacwallace.membership_service.Utils.Exceptions.InUseException;
+import com.isaacwallace.membership_service.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.membership_service.Utils.Exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,12 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public HttpErrorInfo handleNotFoundException(WebRequest req, Exception ex){
         return createHttpErrorInfo(HttpStatus.NOT_FOUND, req, ex);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidInputException.class)
+    public HttpErrorInfo handleInvalidInputException(WebRequest request, Exception ex){
+        return createHttpErrorInfo(HttpStatus.BAD_REQUEST, request, ex);
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)

@@ -2,6 +2,7 @@ package com.isaacwallace.api_gateway.Utils;
 
 import com.isaacwallace.api_gateway.Utils.Exceptions.HttpErrorInfo;
 import com.isaacwallace.api_gateway.Utils.Exceptions.InUseException;
+import com.isaacwallace.api_gateway.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.api_gateway.Utils.Exceptions.NotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,12 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public HttpErrorInfo handleNotFoundException(WebRequest req, Exception ex){
         return createHttpErrorInfo(HttpStatus.NOT_FOUND, req, ex);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidInputException.class)
+    public HttpErrorInfo handleInvalidInputException(WebRequest request, Exception ex){
+        return createHttpErrorInfo(HttpStatus.BAD_REQUEST, request, ex);
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
