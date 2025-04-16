@@ -27,3 +27,6 @@ app:
   author-service:
     host: author-service
     port: 8080
+  membership-service:
+    host: membership-service
+    port: 8080

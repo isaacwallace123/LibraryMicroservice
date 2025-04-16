@@ -41,15 +41,6 @@ public class AuthorController {
         return ResponseEntity.status(HttpStatus.OK).body(this.authorService.updateAuthor(authorid, authorRequestModel));
     }
 
-    /*
-    *
-    * @PutMapping(value = "{authorid}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AuthorResponseModel> EditAuthor(@PathVariable String authorid, @RequestBody AuthorRequestModel authorRequestModel) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.authorService.updateAuthor(authorid, authorRequestModel));
-    }
-    *
-    * */
-
     @DeleteMapping(value = "{authorid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> deleteAuthor(@PathVariable String authorid) {
         this.authorService.deleteAuthor(authorid);

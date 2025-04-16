@@ -1,11 +1,11 @@
 services:
-  author-service:
+  membership-service:
     build:
       context: .
       dockerfile: Dockerfile
-    hostname: author-service
+    hostname: membership-service
     ports:
-      - "8082:8080"
+      - "8081:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     volumes:
