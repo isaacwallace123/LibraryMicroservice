@@ -1,0 +1,6 @@
+include 'api-gateway'
+include 'author-service'
+include 'employee-service'
+include 'inventory-service'
+include 'membership-service'
+include 'transaction-service'
