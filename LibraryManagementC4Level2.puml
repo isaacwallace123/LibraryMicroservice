@@ -1,0 +1,58 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+' uncomment the following line and comment the first to use locally
+' !include C4_Container.puml
+
+' LAYOUT_TOP_DOWN()
+' LAYOUT_AS_SKETCH()
+LAYOUT_WITH_LEGEND()
+AddElementTag("microService", $shape=EightSidedShape(), $bgColor="CornflowerBlue", $fontColor="white", $legendText="micro service\neight sided")
+AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="lightSkyBlue", $fontColor="white")
+
+SHOW_PERSON_OUTLINE()
+
+title System Context diagram for Library Management System
+
+Person(employee, "Employee", "An employee of the Library Management business.")
+
+
+System_Boundary(c1, "Library Management System") {
+    Container(web_app, "Web Application", "Java, Spring MVC", "Delivers the static content and the Internet banking SPA")
+    Container(spa, "Single-Page App", "JavaScript, Angular", "Provides all the Internet banking functionality to customers via their web browser")
+    Container(api_gateway, "API-gateway", "Java, Docker Container", "Provides Internet banking functionality via API")
+    Container(ts, "transaction-service", "Java, Docker Container", "Provides Internet banking functionality via API")
+    Container(ms, "membership-service", "Java, Docker Container", "Provides Internet banking functionality via API")
+    Container(is, "inventory-service", "Java, Docker Container", "Provides Internet banking functionality via API")
+    Container(as, "author-service", "Java, Docker Container", "Provides Internet banking functionality via API")
+    Container(es, "employee-service", "Java, Docker Container", "Provides Internet banking functionality via API")
+    ContainerDb(memb_db, "member-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+    ContainerDb(empl_db, "employee-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+    ContainerDb(invent_db, "inventory-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+    ContainerDb(author_db, "author-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+    ContainerDb(trans_db, "transaction-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+}
+
+Rel_Neighbor(web_app, spa, "Delivers")
+Rel(spa, api_gateway, "Uses", "async, JSON/HTTPS")
+
+Rel(employee, web_app, "Uses", "HTTPS")
+Rel(employee, spa, "Uses", "HTTPS")
+
+Rel(api_gateway, ts, "Uses", "HTTPS")
+Rel(api_gateway, es, "Uses", "HTTPS")
+Rel(api_gateway, is, "Uses", "HTTPS")
+Rel(api_gateway, as, "Uses", "HTTPS")
+Rel(api_gateway, ms, "Uses", "HTTPS")
+
+Rel(is, as, "Uses", "HTTPS")
+Rel(is, ms, "Uses", "HTTPS")
+Rel(is, ts, "Uses", "HTTPS")
+
+
+Rel_D(as, author_db, "reads ...", "JDBC/SQL/TCP")
+Rel_D(es, empl_db, "reads ...", "JDBC/SQL/TCP")
+Rel_D(is, invent_db, "reads ...", "JDBC/SQL/TCP")
+Rel_D(ms, memb_db, "reads ...", "JDBC/SQL/TCP")
+Rel_D(ts, trans_db, "reads ...", "JDBC/SQL/TCP")
+
+@enduml

@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.3.3'
-	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.springframework.boot' version '3.4.2'
+	id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.isaacwallace.api-gateway'
@@ -13,13 +13,52 @@ java {
 	}
 }
 
+ext {
+	mapstructVersion = "1.5.3.Final"
+	lombokVersion = "1.18.26"
+	lombokMapstructBindingVersion = "0.2.0"
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
 repositories {
 	mavenCentral()
 }
 
+//dependencyManagement {
+//	imports {
+//		mavenBom("org.springframework.cloud:spring-cloud-dependencies:2023.0.1")
+//	}
+//}
+
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
+	//implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	//implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+
+	compileOnly 'org.projectlombok:lombok'
+	//compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+	annotationProcessor /*"org.mapstruct:mapstruct-processor:${mapstructVersion}",*/ "org.projectlombok:lombok:${lombokVersion}"/*, "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"*/
+	//testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	//runtimeOnly 'com.h2database:h2'
+
+	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

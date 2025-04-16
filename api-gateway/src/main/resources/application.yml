@@ -1,0 +1,29 @@
+server.port: 8080
+
+spring.datasource.hikari.initializationFailTimeout: 60000
+
+server:
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    com.isaacwallace: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+---
+
+spring:
+  application:
+    name: api-gateway
+
+  config:
+    activate:
+      on-profile: docker
+
+app:
+  author-service:
+    host: author-service
+    port: 8080

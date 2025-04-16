@@ -1,0 +1,202 @@
+@startuml
+hide circle
+
+top to bottom direction
+
+!define ENTITY(entityName) entity entityName << Entity >>
+!define AGGREGATE(aggregateName) entity aggregateName << Aggregate >>
+!define AGGREGATE_ROOT(aggregateRootName) entity aggregateRootName << Aggregate Root >>
+!define VALUE_OBJECT(valueObjectName) class valueObjectName << Value Object >>
+!define ENUM(enumName) class enumName << Enum >>
+!pragma useVerticalIf on
+
+skinparam dpi 350
+skinparam packageStyle rectangle
+
+skinparam rectangle {
+    BackgroundColor #f7f4eb
+    BorderColor Black
+}
+rectangle "Library Management" as BoundedContextSocialMedia #line.dashed {
+    package "Membership Sub-Domain" #FFCDD2 {
+        ENTITY(Member) #lightblue {
+            memberId: UUID
+            firstname: String
+            lastname: String
+            email: String
+        }
+
+        VALUE_OBJECT(Address) #Bisque {
+            street: String
+            city: String
+            postal: String
+            province: String
+        }
+
+        VALUE_OBJECT(Phone) #Bisque {
+            number: String
+            type: PhoneType
+        }
+
+        ENUM(PhoneType) #SandyBrown {
+            MOBILE,
+            HOME,
+            WORK
+        }
+
+        VALUE_OBJECT(MemberIdentifier) #Bisque {
+            memberId: UUID
+        }
+
+        Member "1" o--> "1" MemberIdentifier
+        Member --> Address
+        Member --> Phone
+
+        Phone --> PhoneType
+    }
+
+    package "Author Sub-Domain" #LightGreen {
+        ENTITY(Author) #lightblue {
+            authorId: UUID
+            first_name: String
+            last_name: String
+            pseudonym: String
+        }
+
+        VALUE_OBJECT(AuthorIdentifier) #Bisque {
+            authorId: UUID
+        }
+
+        Author "1" o--> "1" AuthorIdentifier
+    }
+
+    package "Transaction Sub-Domain" #Wheat {
+        AGGREGATE_ROOT(Transaction) #lightblue {
+            transactionId: UUID
+            memberId: UUID
+            bookId: UUID
+            employeeId: UUID
+            transactionDate: DateTime
+            status: TransactionStatus
+        }
+
+        VALUE_OBJECT(TransactionDate) #Bisque {
+            date: DateTime
+        }
+
+        VALUE_OBJECT(TransactionIdentifier) #Bisque {
+            transactionId: UUID
+        }
+
+        VALUE_OBJECT(Payment) #Bisque {
+            method: PaymentMethod
+            currency: PaymentCurrency
+            amount: Double
+        }
+
+        ENUM(PaymentCurrency) #SandyBrown {
+            CAD,
+            USD,
+            EUR
+        }
+
+        ENUM(PaymentMethod) #SandyBrown {
+            DEBIT,
+            CREDIT,
+            CASH
+        }
+
+        ENUM(TransactionStatus) #SandyBrown {
+            PENDING,
+            COMPLETED,
+            CANCELED
+        }
+
+        Transaction "1" o--> "1" TransactionIdentifier
+        Transaction --> TransactionDate
+        Transaction --> TransactionStatus
+        Transaction --> Payment
+
+        Payment --> PaymentMethod
+        Payment --> PaymentCurrency
+    }
+
+    package "Inventory Sub-Domain" #LightSkyBlue {
+        AGGREGATE_ROOT(Inventory) #lightblue {
+            inventoryId: UUID
+            bookId: UUID
+            quantity: Integer
+            status: InventoryStatus
+        }
+
+        VALUE_OBJECT(InventoryIdentifier) #Bisque {
+            inventoryId: UUID
+        }
+
+        VALUE_OBJECT(BookStock) #Bisque {
+            quantity: Integer
+        }
+
+        ENUM(InventoryStatus) #SandyBrown {
+            AVAILABLE,
+            UNAVAILABLE
+        }
+
+        AGGREGATE(Book) #lightblue {
+            bookId: UUID
+            authoId: UUID
+            title: String
+            genre: String
+            publisher: String
+            released: DateTime
+        }
+
+        VALUE_OBJECT(BookIdentifier) #Bisque {
+            isbn: UUID
+        }
+
+        Book "1" o--> "1" BookIdentifier
+        Book "1" o--> "1" MemberIdentifier
+
+        Inventory "1" o--> "1" InventoryIdentifier
+        Inventory --> InventoryStatus
+        Inventory "1" o--> "1..*" Book
+        Inventory --> BookStock
+    }
+
+    package "Employee Sub-Domain" #Violet {
+        ENTITY(Employee) #lightblue {
+            employeeid: UUID
+            first_name: String
+            last_name: String
+            dob: DateTime
+            age: Integer
+            email: String
+            title: EmployeeTitle
+            salary: Double
+        }
+
+        ENUM(EmployeeTitle) #SandyBrown {
+            LIBRARIAN,
+            SUPERVISOR,
+            MANAGER,
+            ADMINISTRATOR
+        }
+
+        VALUE_OBJECT(EmployeeIdentifier) #Bisque {
+            isbn: UUID
+        }
+
+        Employee "1" o--> "1" EmployeeIdentifier
+        Employee --> EmployeeTitle
+    }
+
+    Book "1" o--> "1" AuthorIdentifier
+    Book "1" o--> "*" InventoryIdentifier
+
+    Transaction "1" o--> "1" EmployeeIdentifier
+    Transaction "1" o--> "1" BookIdentifier
+    Transaction "1" o--> "1" MemberIdentifier
+}
+
+@enduml
