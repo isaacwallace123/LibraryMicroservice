@@ -11,8 +11,8 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class EmployeeRequestModel extends RepresentationModel<EmployeeRequestModel> {
-    String first_name;
-    String last_name;
+    String firstName;
+    String lastName;
 
     LocalDate dob;
 

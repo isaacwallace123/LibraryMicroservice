@@ -7,6 +7,7 @@ import com.isaacwallace.author_service.Mapper.AuthorRequestMapper;
 import com.isaacwallace.author_service.Mapper.AuthorResponseMapper;
 import com.isaacwallace.author_service.Presentation.Models.AuthorRequestModel;
 import com.isaacwallace.author_service.Presentation.Models.AuthorResponseModel;
+import com.isaacwallace.author_service.Utils.Exceptions.DuplicateResourceException;
 import com.isaacwallace.author_service.Utils.Exceptions.InUseException;
 import com.isaacwallace.author_service.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.author_service.Utils.Exceptions.NotFoundException;
@@ -34,6 +35,14 @@ public class AuthorServiceImpl implements AuthorService {
         }
         if (model.getLastName() == null || model.getLastName().isBlank()) {
             throw new InvalidInputException("Invalid lastName: " + model.getLastName());
+        }
+
+        if (this.authorRepository.existsByFirstNameIgnoreCaseAndLastNameIgnoreCase(model.getFirstName(), model.getLastName())) {
+            throw new DuplicateResourceException("Duplicate author: " + model.getFirstName() + " " + model.getLastName());
+        }
+
+        if (model.getPseudonym() != null && this.authorRepository.existsByPseudonymIgnoreCase(model.getPseudonym())) {
+            throw new DuplicateResourceException("Duplicate pseudonym: " + model.getPseudonym());
         }
     }
 

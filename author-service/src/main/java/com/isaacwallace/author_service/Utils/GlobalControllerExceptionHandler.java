@@ -1,9 +1,6 @@
 package com.isaacwallace.author_service.Utils;
 
-import com.isaacwallace.author_service.Utils.Exceptions.HttpErrorInfo;
-import com.isaacwallace.author_service.Utils.Exceptions.InUseException;
-import com.isaacwallace.author_service.Utils.Exceptions.InvalidInputException;
-import com.isaacwallace.author_service.Utils.Exceptions.NotFoundException;
+import com.isaacwallace.author_service.Utils.Exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,6 +34,12 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(InUseException.class)
     public HttpErrorInfo handleInUseException(WebRequest request, Exception ex){
         return createHttpErrorInfo(HttpStatus.UNPROCESSABLE_ENTITY, request, ex);
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(DuplicateResourceException.class)
+    public HttpErrorInfo handleDuplicateResourceException(WebRequest request, Exception ex){
+        return createHttpErrorInfo(HttpStatus.CONFLICT, request, ex);
     }
 }
 

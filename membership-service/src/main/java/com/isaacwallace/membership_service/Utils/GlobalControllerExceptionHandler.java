@@ -1,9 +1,6 @@
 package com.isaacwallace.membership_service.Utils;
 
-import com.isaacwallace.membership_service.Utils.Exceptions.HttpErrorInfo;
-import com.isaacwallace.membership_service.Utils.Exceptions.InUseException;
-import com.isaacwallace.membership_service.Utils.Exceptions.InvalidInputException;
-import com.isaacwallace.membership_service.Utils.Exceptions.NotFoundException;
+import com.isaacwallace.membership_service.Utils.Exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,16 +24,22 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(HttpStatus.NOT_FOUND, req, ex);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(InvalidInputException.class)
     public HttpErrorInfo handleInvalidInputException(WebRequest request, Exception ex){
-        return createHttpErrorInfo(HttpStatus.BAD_REQUEST, request, ex);
+        return createHttpErrorInfo(HttpStatus.UNPROCESSABLE_ENTITY, request, ex);
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(InUseException.class)
     public HttpErrorInfo handleInUseException(WebRequest request, Exception ex){
         return createHttpErrorInfo(HttpStatus.UNPROCESSABLE_ENTITY, request, ex);
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(DuplicateResourceException.class)
+    public HttpErrorInfo handleDuplicateResourceException(WebRequest request, Exception ex){
+        return createHttpErrorInfo(HttpStatus.CONFLICT, request, ex);
     }
 }
 

@@ -8,4 +8,4 @@ INSERT INTO employees (employeeid, first_name, last_name, dob, email, title, sal
     ('61d2d9f8-e144-4984-8bcb-7fa29ef4fdf6', 'Selina', 'Kellie', TIMESTAMP '1998-01-23 00:00:00', 'skellie6@gmail.com', 'ADMINISTRATOR', 10025.20),
     ('eec58e2f-44ad-41fb-b4cb-59b1ae89a68f', 'Trevor', 'Joliffe', TIMESTAMP '1990-08-07 00:00:00', 'tjoliffe7@library.org', 'SUPERVISOR', 910.60),
     ('f1a83c15-3c1d-48cb-a4e7-3e96aa6d4ef3', 'Natalie', 'Rowson', TIMESTAMP '1982-03-30 00:00:00', 'nrowson8@yahoo.com', 'MANAGER', 1020.00),
-('b139a9b1-6c37-486b-80b3-5e2e0b3d90fa', 'Kiran', 'Aldrick', TIMESTAMP '2003-12-15 00:00:00', 'kaldrick9@protonmail.com', 'LIBRARIAN', 198.33);
+    ('b139a9b1-6c37-486b-80b3-5e2e0b3d90fa', 'Kiran', 'Aldrick', TIMESTAMP '2003-12-15 00:00:00', 'kaldrick9@protonmail.com', 'LIBRARIAN', 198.33);

@@ -23,5 +23,8 @@ public class Author {
     private String pseudonym;
 
     public Author(@NotNull String firstName, @NotNull String lastName, String pseudonym) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.pseudonym = pseudonym;
     }
 }

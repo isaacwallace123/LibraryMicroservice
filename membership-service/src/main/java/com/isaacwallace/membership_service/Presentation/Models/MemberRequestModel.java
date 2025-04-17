@@ -9,8 +9,8 @@ import lombok.*;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberRequestModel {
-    String first_name;
-    String last_name;
+    String firstName;
+    String lastName;
 
     String email;
 

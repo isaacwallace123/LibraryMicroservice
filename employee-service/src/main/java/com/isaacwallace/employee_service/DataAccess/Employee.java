@@ -1,6 +1,7 @@
 package com.isaacwallace.employee_service.DataAccess;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,8 +19,8 @@ public class Employee {
     @Embedded
     private EmployeeIdentifier employeeIdentifier;
 
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
 
     private LocalDate dob;
 
@@ -27,11 +28,12 @@ public class Employee {
 
     @Enumerated(EnumType.STRING)
     private EmployeeTitle title;
+
     private Double salary;
 
-    public Employee(String first_name, String last_name, LocalDate dob, String email, EmployeeTitle title, Double salary) {
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public Employee(@NotNull String firstName, @NotNull String lastName, @NotNull LocalDate dob, @NotNull String email, @NotNull EmployeeTitle title, @NotNull Double salary) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.dob = dob;
         this.email = email;
         this.title = title;

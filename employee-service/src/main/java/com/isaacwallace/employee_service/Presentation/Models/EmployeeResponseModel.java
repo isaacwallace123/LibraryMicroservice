@@ -9,8 +9,8 @@ import java.time.LocalDate;
 public class EmployeeResponseModel {
     private String employeeid;
 
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
 
     private LocalDate dob;
     private int age;

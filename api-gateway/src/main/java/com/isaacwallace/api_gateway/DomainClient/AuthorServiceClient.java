@@ -3,6 +3,7 @@ package com.isaacwallace.api_gateway.DomainClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isaacwallace.api_gateway.Services.Author.Presentation.Models.AuthorRequestModel;
 import com.isaacwallace.api_gateway.Services.Author.Presentation.Models.AuthorResponseModel;
+import com.isaacwallace.api_gateway.Utils.Exceptions.DuplicateResourceException;
 import com.isaacwallace.api_gateway.Utils.Exceptions.HttpErrorInfo;
 import com.isaacwallace.api_gateway.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.api_gateway.Utils.Exceptions.NotFoundException;
@@ -99,13 +100,14 @@ public class AuthorServiceClient {
     }
 
     private RuntimeException handleHttpClientException(HttpClientErrorException ex) {
-        if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {
+        if (ex.getStatusCode() == HttpStatus.NOT_FOUND)
             return new NotFoundException(getErrorMessage(ex));
-        }
 
-        if (ex.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY) {
+        if (ex.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY)
             return new InvalidInputException(getErrorMessage(ex));
-        }
+
+        if (ex.getStatusCode() == HttpStatus.CONFLICT)
+            return new DuplicateResourceException(getErrorMessage(ex));
 
         log.warn("Got an unexpected HTTP error: {}, will rethrow it", ex.getStatusCode());
         log.warn("Error body: {}", ex.getResponseBodyAsString());

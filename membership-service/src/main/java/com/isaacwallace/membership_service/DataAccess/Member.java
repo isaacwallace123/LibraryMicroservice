@@ -16,8 +16,8 @@ public class Member {
     @Embedded
     private MemberIdentifier memberIdentifier;
 
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String email;
 
     @Embedded

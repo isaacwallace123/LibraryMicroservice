@@ -9,8 +9,8 @@ import org.springframework.hateoas.RepresentationModel;
 public class MembershipResponseModel extends RepresentationModel<MembershipResponseModel> {
     private String memberid;
 
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String email;
 
     private Address address;
