@@ -2,7 +2,6 @@ package com.isaacwallace.employee_service.Presentation.Models;
 
 import com.isaacwallace.employee_service.DataAccess.EmployeeTitle;
 import lombok.*;
-import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDate;
 
@@ -10,7 +9,7 @@ import java.time.LocalDate;
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class EmployeeRequestModel extends RepresentationModel<EmployeeRequestModel> {
+public class EmployeeRequestModel {
     String first_name;
     String last_name;
 

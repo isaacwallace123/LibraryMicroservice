@@ -22,10 +22,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     public List<AuthorResponseModel> getAllAuthors() {
-        return this.authorServiceClient.getAuthors()
-                .stream()
-                .map(this::addLinks)
-                .toList();
+        return this.authorServiceClient.getAuthors().stream().map(this::addLinks).toList();
     }
 
     public AuthorResponseModel getAuthorById(String authorid) {;
@@ -52,7 +49,7 @@ public class AuthorServiceImpl implements AuthorService {
 
         Link allLink = linkTo(methodOn(AuthorController.class)
                 .getAuthors())
-                .withRel("all authors");
+                .withRel("authors");
         authorResponseModel.add(allLink);
 
         return authorResponseModel;

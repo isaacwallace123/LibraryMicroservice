@@ -22,27 +22,27 @@ public class EmployeeController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<EmployeeResponseModel>> getMembers() {
+    public ResponseEntity<List<EmployeeResponseModel>> getEmployees() {
         return ResponseEntity.status(HttpStatus.OK).body(this.employeeService.getAllEmployees());
     }
 
     @GetMapping(value = "{employeeid}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmployeeResponseModel> getMemberById(@PathVariable String employeeid) {
+    public ResponseEntity<EmployeeResponseModel> getEmployeeById(@PathVariable String employeeid) {
         return ResponseEntity.status(HttpStatus.OK).body(this.employeeService.getEmployeeById(employeeid));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmployeeResponseModel> addMember(@RequestBody EmployeeRequestModel employeeRequestModel) {
+    public ResponseEntity<EmployeeResponseModel> addEmployee(@RequestBody EmployeeRequestModel employeeRequestModel) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.employeeService.addEmployee(employeeRequestModel));
     }
 
     @PutMapping(value = "{employeeid}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmployeeResponseModel> updateMember(@PathVariable String employeeid, @RequestBody EmployeeRequestModel employeeRequestModel) {
+    public ResponseEntity<EmployeeResponseModel> updateEmployee(@PathVariable String employeeid, @RequestBody EmployeeRequestModel employeeRequestModel) {
         return ResponseEntity.status(HttpStatus.OK).body(this.employeeService.updateEmployee(employeeid, employeeRequestModel));
     }
 
     @DeleteMapping(value = "{employeeid}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmployeeResponseModel> deleteMember(@PathVariable String employeeid) {
+    public ResponseEntity<EmployeeResponseModel> deleteEmployee(@PathVariable String employeeid) {
         this.employeeService.deleteEmployee(employeeid);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

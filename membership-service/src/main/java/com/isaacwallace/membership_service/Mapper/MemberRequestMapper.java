@@ -1,6 +1,5 @@
 package com.isaacwallace.membership_service.Mapper;
 
-
 import com.isaacwallace.membership_service.DataAccess.MemberIdentifier;
 import com.isaacwallace.membership_service.Presentation.Models.MemberRequestModel;
 import com.isaacwallace.membership_service.DataAccess.Member;

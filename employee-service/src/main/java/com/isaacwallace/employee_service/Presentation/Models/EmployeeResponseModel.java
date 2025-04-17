@@ -2,12 +2,11 @@ package com.isaacwallace.employee_service.Presentation.Models;
 
 import com.isaacwallace.employee_service.DataAccess.EmployeeTitle;
 import lombok.Data;
-import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDate;
 
 @Data
-public class EmployeeResponseModel extends RepresentationModel<EmployeeResponseModel> {
+public class EmployeeResponseModel {
     private String employeeid;
 
     private String first_name;
