@@ -8,10 +8,8 @@ import com.isaacwallace.author_service.Mapper.AuthorResponseMapper;
 import com.isaacwallace.author_service.Presentation.Models.AuthorRequestModel;
 import com.isaacwallace.author_service.Presentation.Models.AuthorResponseModel;
 import com.isaacwallace.author_service.Utils.Exceptions.DuplicateResourceException;
-import com.isaacwallace.author_service.Utils.Exceptions.InUseException;
 import com.isaacwallace.author_service.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.author_service.Utils.Exceptions.NotFoundException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -95,10 +93,6 @@ public class AuthorServiceImpl implements AuthorService {
     public void deleteAuthor(String authorid) {
         Author author = this.getAuthorObjectById(authorid);
 
-        try {
-            this.authorRepository.delete(author);
-        } catch (DataIntegrityViolationException e) {
-            throw new InUseException("Author with id: " + authorid + " is already in use by another entity.");
-        }
+        this.authorRepository.delete(author);
     }
 }

@@ -44,16 +44,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         if (model.getDob() == null) {
-            throw new InvalidInputException("Invalid dob: Input missing.");
+            throw new InvalidInputException("Invalid dob: null");
         }
         if (model.getSalary() == null) {
-            throw new InvalidInputException("Invalid salary: Input missing.");
+            throw new InvalidInputException("Invalid salary: null");
         }
 
         try {
             EmployeeTitle.valueOf(model.getTitle().toString());
-        } catch (IllegalArgumentException e) {
-            throw new InvalidInputException("Invalid title enum: " + model.getTitle());
+        } catch (Exception e) {
+            throw new InvalidInputException("Invalid title: " + model.getTitle());
         }
 
         if (this.employeeRepository.existsByEmailIgnoreCase(model.getEmail())) {

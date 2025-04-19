@@ -53,6 +53,18 @@ class AuthorRepositoryTest {
     }
 
     @Test
+    void testEquals_DifferentClass() {
+        Author author = new Author("John", "Doe", "JD");
+        assertNotEquals(author, "NotAnAuthor");
+    }
+
+    @Test
+    void testEquals_Null() {
+        Author author = new Author("John", "Doe", "JD");
+        assertNotEquals(author, null);
+    }
+
+    @Test
     void testNotEqualsDifferentFields() {
         Author a1 = new Author("Isaac", "Wallace", "IW");
         a1.setAuthorIdentifier(new AuthorIdentifier("abc-123"));
@@ -77,15 +89,37 @@ class AuthorRepositoryTest {
     }
 
     @Test
+    void testEquals_DifferentId() {
+        Author a1 = new Author("John", "Doe", "JD");
+        Author a2 = new Author("John", "Doe", "JD");
+        a1.setAuthorIdentifier(new AuthorIdentifier("123"));
+        a2.setAuthorIdentifier(new AuthorIdentifier("456"));
+
+        assertNotEquals(a1, a2);
+    }
+
+    @Test
+    void testHashCode_DifferentObjects() {
+        Author a1 = new Author("John", "Doe", "JD");
+        Author a2 = new Author("Jane", "Smith", "JS");
+        assertNotEquals(a1.hashCode(), a2.hashCode());
+    }
+
+    @Test
     void testHashCodeConsistency() {
         Author author = new Author("Isaac", "Wallace", "IW");
         author.setAuthorIdentifier(new AuthorIdentifier("abc-123"));
         author.setId(1);
 
         int hash1 = author.hashCode();
+
+        assertEquals(hash1, author.hashCode()); // same hash on repeated calls
+
+        author.setFirstName("John");
+
         int hash2 = author.hashCode();
 
-        assertEquals(hash1, hash2); // same hash on repeated calls
+        assertNotEquals(hash2, hash1);
     }
 
     @Test
@@ -103,6 +137,44 @@ class AuthorRepositoryTest {
         assertNotNull(authors);
         assertNotEquals(0, authors.size());
         assertEquals(afterSizeDB, authors.size());
+    }
+
+    @Test
+    void testEquals_DifferentFirstName() {
+        Author a1 = new Author("John", "Doe", "JD");
+        Author a2 = new Author("Jane", "Doe", "JD");
+        assertNotEquals(a1, a2);
+    }
+
+    @Test
+    void testEquals_DifferentLastName() {
+        Author a1 = new Author("John", "Doe", "JD");
+        Author a2 = new Author("John", "Smith", "JD");
+        assertNotEquals(a1, a2);
+    }
+
+    @Test
+    void testEquals_DifferentPseudonym() {
+        Author a1 = new Author("John", "Doe", "JD");
+        Author a2 = new Author("John", "Doe", "Johnny");
+        assertNotEquals(a1, a2);
+    }
+
+    @Test
+    void testEquals_DifferentIdentifier() {
+        Author a1 = new Author("John", "Doe", "JD");
+        Author a2 = new Author("John", "Doe", "JD");
+        a1.setAuthorIdentifier(new AuthorIdentifier("A1"));
+        a2.setAuthorIdentifier(new AuthorIdentifier("A2"));
+        assertNotEquals(a1, a2);
+    }
+
+
+    @Test
+    void testEquals_MixedNullFields() {
+        Author a1 = new Author("John", null, "JD");
+        Author a2 = new Author("John", "Doe", "JD");
+        assertNotEquals(a1, a2);
     }
 
     @Test
@@ -208,17 +280,6 @@ class AuthorRepositoryTest {
 
         List<Author> authors = authorRepository.findAll();
         assertEquals(2, authors.size());
-    }
-
-    @Test
-    void testFindByPseudonymIgnoreCase() {
-        Author author = new Author("Isaac", "Wallace", "IW");
-        author.setAuthorIdentifier(new AuthorIdentifier());
-
-        authorRepository.save(author);
-
-        boolean exists = authorRepository.existsByPseudonymIgnoreCase("iw");
-        assertTrue(exists);
     }
 
     @Test

@@ -41,6 +41,115 @@ class AuthorControllerIntegrationTest {
             .expectStatus().isEqualTo(HttpStatus.NOT_ACCEPTABLE);
     }
 
+    /*--> RequestModel Tests <--*/
+
+    @Test
+    void testRequestModelConstructor() {
+        AuthorRequestModel model = AuthorRequestModel.builder()
+                .firstName("Isaac")
+                .lastName("Wallace")
+                .pseudonym("Test")
+                .build();
+
+        assertEquals("Isaac", model.getFirstName());
+        assertEquals("Wallace", model.getLastName());
+        assertEquals("Test", model.getPseudonym());
+    }
+
+    @Test
+    void testRequestModelEqualsAndHashCode() {
+        AuthorRequestModel a = AuthorRequestModel.builder()
+                .firstName("Isaac")
+                .lastName("Wallace")
+                .pseudonym("Test")
+                .build();
+
+        AuthorRequestModel b = AuthorRequestModel.builder()
+                .firstName("Isaac")
+                .lastName("Wallace")
+                .pseudonym("Test")
+                .build();
+
+        assertEquals(a, b);
+        assertEquals(a.hashCode(), b.hashCode());
+    }
+
+    @Test
+    void testRequestModelToString() {
+        AuthorRequestModel model = AuthorRequestModel.builder()
+                .firstName("Isaac")
+                .lastName("Wallace")
+                .pseudonym("Test")
+                .build();
+
+        assertTrue(model.toString().contains("Isaac"));
+        assertTrue(model.toString().contains("Wallace"));
+        assertTrue(model.toString().contains("Test"));
+    }
+
+    /*--> ResponseModel Tests <--*/
+
+    @Test
+    void testResponseModelContructor() {
+        AuthorResponseModel model = AuthorResponseModel.builder()
+                .firstName("Isaac")
+                .lastName("Wallace")
+                .pseudonym("Test")
+                .build();
+
+        assertEquals("Isaac", model.getFirstName());
+        assertEquals("Wallace", model.getLastName());
+        assertEquals("Test", model.getPseudonym());
+    }
+
+    @Test
+    void testResponseModelSettersAndGetters() {
+        AuthorResponseModel model = AuthorResponseModel.builder()
+                .firstName("Isaac")
+                .lastName("Wallace")
+                .pseudonym("Test")
+                .build();
+
+        model.setFirstName("Test");
+        model.setLastName("Boob");
+        model.setPseudonym("Different");
+
+        assertEquals("Test", model.getFirstName());
+        assertEquals("Boob", model.getLastName());
+        assertEquals("Different", model.getPseudonym());
+    }
+
+    @Test
+    void testResponseModelEqualsAndHashCode() {
+        AuthorResponseModel a = AuthorResponseModel.builder()
+                .firstName("Isaac")
+                .lastName("Wallace")
+                .pseudonym("Test")
+                .build();
+
+        AuthorResponseModel b = AuthorResponseModel.builder()
+                .firstName("Isaac")
+                .lastName("Wallace")
+                .pseudonym("Test")
+                .build();
+
+        assertEquals(a, b);
+        assertEquals(a.hashCode(), b.hashCode());
+    }
+
+    @Test
+    void testResponseModelToString() {
+        AuthorResponseModel model = AuthorResponseModel.builder()
+                .firstName("Isaac")
+                .lastName("Wallace")
+                .pseudonym("Test")
+                .build();
+
+        assertTrue(model.toString().contains("Isaac"));
+        assertTrue(model.toString().contains("Wallace"));
+        assertTrue(model.toString().contains("Test"));
+    }
+
     /*--> Validation Tests <--*/
 
     @Test
