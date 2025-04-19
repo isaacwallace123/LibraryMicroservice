@@ -9,7 +9,6 @@ import com.isaacwallace.employee_service.Mapper.EmployeeResponseMapper;
 import com.isaacwallace.employee_service.Presentation.Models.EmployeeRequestModel;
 import com.isaacwallace.employee_service.Presentation.Models.EmployeeResponseModel;
 import com.isaacwallace.employee_service.Utils.Exceptions.DuplicateResourceException;
-import com.isaacwallace.employee_service.Utils.Exceptions.InUseException;
 import com.isaacwallace.employee_service.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.employee_service.Utils.Exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -114,10 +113,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployee(String employeeid) {
         Employee employee = this.getEmployeeObjectById(employeeid);
 
-        try {
-            this.employeeRepository.delete(employee);
-        } catch (DataIntegrityViolationException exception) {
-            throw new InUseException("Employee with id: " + employeeid + " is already in use by another entity.");
-        }
+        this.employeeRepository.delete(employee);
     }
 }

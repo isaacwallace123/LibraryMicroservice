@@ -30,12 +30,6 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(HttpStatus.UNPROCESSABLE_ENTITY, request, ex);
     }
 
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(InUseException.class)
-    public HttpErrorInfo handleInUseException(WebRequest request, Exception ex){
-        return createHttpErrorInfo(HttpStatus.UNPROCESSABLE_ENTITY, request, ex);
-    }
-
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DuplicateResourceException.class)
     public HttpErrorInfo handleDuplicateResourceException(WebRequest request, Exception ex){
