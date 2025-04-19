@@ -95,6 +95,65 @@ class EmployeeControllerIntegrationTest {
     /*--> RequestModel Tests <--*/
 
     @Test
+    void testEqualsAndHashCodeOnRequestModel() {
+        EmployeeRequestModel model1 = EmployeeRequestModel.builder()
+                .firstName("Isaac")
+                .lastName("Wallace")
+                .dob(LocalDate.of(1995, 10, 5))
+                .email("isaac@example.com")
+                .title(EmployeeTitle.ADMINISTRATOR)
+                .salary(90000.0)
+                .build();
+
+        EmployeeRequestModel model2 = EmployeeRequestModel.builder()
+                .firstName("Isaac")
+                .lastName("Wallace")
+                .dob(LocalDate.of(1995, 10, 5))
+                .email("isaac@example.com")
+                .title(EmployeeTitle.ADMINISTRATOR)
+                .salary(90000.0)
+                .build();
+
+        EmployeeRequestModel modelDifferent = EmployeeRequestModel.builder()
+                .firstName("NotIsaac")
+                .lastName("Wallace")
+                .dob(LocalDate.of(1990, 1, 1))
+                .email("different@example.com")
+                .title(EmployeeTitle.MANAGER)
+                .salary(100000.0)
+                .build();
+
+        assertEquals(model1, model2);
+        assertEquals(model1.hashCode(), model2.hashCode());
+
+        assertNotEquals(model1, null);
+        assertNotEquals(model1, new Object());
+        assertNotEquals(model1, modelDifferent);
+        assertEquals(model1, model1); // same reference
+    }
+
+    @Test
+    void testGettersOnRequestModel() {
+        LocalDate dob = LocalDate.of(1995, 10, 5);
+        EmployeeRequestModel model = EmployeeRequestModel.builder()
+                .firstName("Isaac")
+                .lastName("Wallace")
+                .dob(dob)
+                .email("isaac@example.com")
+                .title(EmployeeTitle.ADMINISTRATOR)
+                .salary(90000.0)
+                .build();
+
+        assertEquals("Isaac", model.getFirstName());
+        assertEquals("Wallace", model.getLastName());
+        assertEquals(dob, model.getDob());
+        assertEquals("isaac@example.com", model.getEmail());
+        assertEquals(EmployeeTitle.ADMINISTRATOR, model.getTitle());
+        assertEquals(90000.0, model.getSalary());
+    }
+
+
+    @Test
     void testRequestModelConstructor() {
         EmployeeRequestModel model = EmployeeRequestModel.builder()
                 .firstName("Isaac")
@@ -157,10 +216,57 @@ class EmployeeControllerIntegrationTest {
     /*--> ResponseModel Tests <--*/
 
     @Test
+    void testSetEmployeeidOnResponseModel() {
+        EmployeeResponseModel model = EmployeeResponseModel.builder().build();
+        model.setEmployeeid("E123");
+        assertEquals("E123", model.getEmployeeid());
+    }
+
+    @Test
+    void testSetAgeOnResponseModel() {
+        EmployeeResponseModel model = EmployeeResponseModel.builder().build();
+        model.setAge(30);
+        assertEquals(30, model.getAge());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        EmployeeResponseModel model1 = EmployeeResponseModel.builder()
+                .employeeid("E001")
+                .firstName("John")
+                .lastName("Doe")
+                .age(30)
+                .dob(LocalDate.of(1990, 1, 1))
+                .email("john.doe@example.com")
+                .title(EmployeeTitle.MANAGER)
+                .salary(85000.0)
+                .build();
+
+        EmployeeResponseModel model2 = EmployeeResponseModel.builder()
+                .employeeid("E001")
+                .firstName("John")
+                .lastName("Doe")
+                .age(30)
+                .dob(LocalDate.of(1990, 1, 1))
+                .email("john.doe@example.com")
+                .title(EmployeeTitle.MANAGER)
+                .salary(85000.0)
+                .build();
+
+        assertEquals(model1, model2);
+        assertEquals(model1.hashCode(), model2.hashCode());
+
+        assertNotEquals(model1, null);
+        assertNotEquals(model1, new Object());
+        assertEquals(model1, model1); // identity
+    }
+
+    @Test
     void testResponseModelContructor() {
         EmployeeResponseModel model = EmployeeResponseModel.builder()
                 .firstName("Isaac")
                 .lastName("Wallace")
+                .age(30)
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
@@ -180,6 +286,7 @@ class EmployeeControllerIntegrationTest {
         EmployeeResponseModel model = EmployeeResponseModel.builder()
                 .firstName("Isaac")
                 .lastName("Wallace")
+                .age(30)
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
@@ -206,6 +313,7 @@ class EmployeeControllerIntegrationTest {
         EmployeeResponseModel model1 = EmployeeResponseModel.builder()
                 .firstName("Isaac")
                 .lastName("Wallace")
+                .age(30)
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
@@ -215,6 +323,7 @@ class EmployeeControllerIntegrationTest {
         EmployeeResponseModel model2 = EmployeeResponseModel.builder()
                 .firstName("Isaac")
                 .lastName("Wallace")
+                .age(30)
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
@@ -230,6 +339,7 @@ class EmployeeControllerIntegrationTest {
         EmployeeResponseModel model = EmployeeResponseModel.builder()
                 .firstName("Isaac")
                 .lastName("Wallace")
+                .age(30)
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)

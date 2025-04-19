@@ -361,4 +361,74 @@ class EmployeeRepositoryTest {
         assertDoesNotThrow(() -> UUID.fromString(employeeIdentifier.getEmployeeid()));
         assertEquals(uuid, employeeIdentifier.getEmployeeid());
     }
+
+    @Test
+    void testEqualsIdenticalValuesDifferentInstances() {
+        EmployeeIdentifier id = new EmployeeIdentifier("same-id");
+
+        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+
+        e1.setId(1);
+        e2.setId(1);
+        e1.setEmployeeIdentifier(id);
+        e2.setEmployeeIdentifier(id);
+
+        assertEquals(e1, e2);
+    }
+
+    @Test
+    void testEqualsDifferentEmployeeIdentifier() {
+        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+
+        e1.setId(1);
+        e2.setId(1);
+        e1.setEmployeeIdentifier(new EmployeeIdentifier("id1"));
+        e2.setEmployeeIdentifier(new EmployeeIdentifier("id2"));
+
+        assertNotEquals(e1, e2);
+    }
+
+    @Test
+    void testHashCodeConsistencyForSameState() {
+        EmployeeIdentifier identifier = new EmployeeIdentifier("abc");
+
+        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "email@example.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "email@example.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+
+        e1.setId(1);
+        e2.setId(1);
+        e1.setEmployeeIdentifier(identifier);
+        e2.setEmployeeIdentifier(identifier);
+
+        assertEquals(e1.hashCode(), e2.hashCode());
+    }
+
+    @Test
+    void testEqualsWithNullFields() {
+        Employee e1 = new Employee(null, null, null, null, null, null);
+        Employee e2 = new Employee(null, null, null, null, null, null);
+
+        e1.setId(null);
+        e2.setId(null);
+
+        assertEquals(e1, e2);
+    }
+
+    @Test
+    void testEqualsWithOneNullField() {
+        Employee e1 = new Employee("John", null, LocalDate.of(2000, 1, 1), "email@example.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "email@example.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+
+        assertNotEquals(e1, e2);
+    }
+
+    @Test
+    void testCanEqual() {
+        Employee employee = new Employee();
+        assertTrue(employee.canEqual(new Employee()));
+        assertFalse(employee.canEqual("Not an employee"));
+    }
+
 }
