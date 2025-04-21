@@ -9,7 +9,6 @@ import com.isaacwallace.membership_service.Mapper.MemberResponseMapper;
 import com.isaacwallace.membership_service.Presentation.Models.MemberRequestModel;
 import com.isaacwallace.membership_service.Presentation.Models.MemberResponseModel;
 import com.isaacwallace.membership_service.Utils.Exceptions.DuplicateResourceException;
-import com.isaacwallace.membership_service.Utils.Exceptions.InUseException;
 import com.isaacwallace.membership_service.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.membership_service.Utils.Exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -132,10 +131,6 @@ public class MemberServiceImpl implements MemberService {
     public void deleteMember(String memberid) {
         Member member = this.getMemberObjectById(memberid);
 
-        try {
-            this.memberRepository.delete(member);
-        } catch (DataIntegrityViolationException exception) {
-            throw new InUseException("Member with id: " + memberid + " is already in use by another entity, currently cannot delete.");
-        }
+        this.memberRepository.delete(member);
     }
 }

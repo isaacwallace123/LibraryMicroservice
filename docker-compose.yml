@@ -40,6 +40,37 @@ services:
     environment:
       - PMA_ARBITRARY=1
 
+  postgres1:
+    image: postgres:latest
+    hostname: postgres1
+    container_name: postgres1
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=membership-db
+      - PGUSER=membership-db
+      - POSTGRES_PASSWORD=pwd
+    volumes:
+      - ./data/postgres1:/var/lib/postgresql
+      - ./membership-service/data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: "pg_isready -h postgres1"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: PostgresAdmin
+    restart: always
+    ports:
+      - 9000:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=8Y2o6@example.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    depends_on:
+      - postgres1
+
   # API GATEWAY
 
   api-gateway:
@@ -73,7 +104,7 @@ services:
       - logs:/app/logs
     restart: always
     depends_on:
-      mysql1:
+      postgres1:
         condition: service_healthy
     privileged: true
 

@@ -12,48 +12,41 @@ services:
       - logs:/app/logs
     restart: always
     depends_on:
-      mysql1:
+      postgres1:
         condition: service_healthy
     privileged: true
 
-  mysql1:
-    image: mysql:8.0
-    container_name: library-db
+  postgres1:
+    image: postgres:latest
+    hostname: postgres1
+    container_name: postgres1
     ports:
-      - "3307:3306"
+      - 5432:5432
     environment:
-      - MYSQL_ROOT_PASSWORD=pwd
-      - MYSQL_DATABASE=library-db
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=pwd
+      - POSTGRES_USER=membership-db
+      - PGUSER=membership-db
+      - POSTGRES_PASSWORD=pwd
     volumes:
-      - ./data/mysql1:/var/lib/mysql1
-      - ./data/init.d:/docker-entrypoint-initdb.d
+      - ./data/postgres1:/var/lib/postgresql
+      - ./membership-service/data/init.d:/docker-entrypoint-initdb.d
     healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-uuser",
-          "-ppwd",
-          "-h",
-          "localhost",
-        ]
+      #      test: ["CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost"]
+      test: "pg_isready -h postgres1"
       interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 5
 
-  phpmyadmin:
-    image: phpmyadmin:5.2.0
-    container_name: PhpMyAdmin
-    links:
-      - mysql1
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin-membership
     restart: always
     ports:
-      - 5013:80
+      - 9000:80
     environment:
-      - PMA_ARBITRARY=1
+      - PGADMIN_DEFAULT_EMAIL=8Y2o6@example.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    depends_on:
+      - postgres1
 
 volumes:
   logs:
