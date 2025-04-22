@@ -28,7 +28,7 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:h2:mem:library-db;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:employee-db;DB_CLOSE_DELAY=-1
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -57,7 +57,7 @@ spring:
 # For Docker
 spring:
   datasource:
-    url: jdbc:mysql://mysql1/library-db
+    url: jdbc:mysql://employee-mysql/employee-db
     username: user
     password: pwd
 

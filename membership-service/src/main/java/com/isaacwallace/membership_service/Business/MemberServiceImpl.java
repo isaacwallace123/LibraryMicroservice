@@ -44,10 +44,10 @@ public class MemberServiceImpl implements MemberService {
         }
 
         if (model.getPhone() == null) {
-            throw new InvalidInputException("Invalid phone: Input missing.");
+            throw new InvalidInputException("Invalid phone: null");
         }
         if (model.getAddress() == null) {
-            throw new InvalidInputException("Invalid address: Input missing.");
+            throw new InvalidInputException("Invalid address: null");
         }
 
         if (model.getAddress().getStreet() == null || model.getAddress().getStreet().isBlank()) {
@@ -57,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
             throw new InvalidInputException("Invalid city: " + model.getAddress().getCity());
         }
         if (model.getAddress().getProvince() == null || model.getAddress().getProvince().isBlank()) {
-            throw new InvalidInputException("Invalid state: " + model.getAddress().getProvince());
+            throw new InvalidInputException("Invalid province: " + model.getAddress().getProvince());
         }
         if (model.getAddress().getPostal() == null || model.getAddress().getPostal().isBlank()) {
             throw new InvalidInputException("Invalid zip: " + model.getAddress().getPostal());
@@ -69,8 +69,8 @@ public class MemberServiceImpl implements MemberService {
 
         try {
             PhoneType.valueOf(model.getPhone().getType().toString());
-        } catch (IllegalArgumentException e) {
-            throw new InvalidInputException("Invalid title enum: " + model.getPhone().getType());
+        } catch (Exception e) {
+            throw new InvalidInputException("Invalid phone type: " + model.getPhone().getType());
         }
 
         if (this.memberRepository.existsByFirstNameIgnoreCaseAndLastNameIgnoreCase(model.getFirstName(), model.getLastName())) {

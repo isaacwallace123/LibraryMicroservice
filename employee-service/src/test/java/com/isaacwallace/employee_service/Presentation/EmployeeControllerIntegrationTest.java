@@ -87,9 +87,8 @@ class EmployeeControllerIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody()
-                .jsonPath("$").isArray()
-                .jsonPath("$").isEmpty();
+                .expectBodyList(EmployeeResponseModel.class)
+                .value(list -> assertTrue(list.isEmpty()));
     }
 
     /*--> RequestModel Tests <--*/
@@ -125,11 +124,11 @@ class EmployeeControllerIntegrationTest {
 
         assertEquals(model1, model2);
         assertEquals(model1.hashCode(), model2.hashCode());
+        assertNotEquals(model1, modelDifferent);
+        assertNotEquals(model2, modelDifferent);
 
         assertNotEquals(model1, null);
         assertNotEquals(model1, new Object());
-        assertNotEquals(model1, modelDifferent);
-        assertEquals(model1, model1); // same reference
     }
 
     @Test
@@ -352,7 +351,6 @@ class EmployeeControllerIntegrationTest {
         assertTrue(model.toString().contains("ADMINISTRATOR"));
     }
 
-
     /*--> CRUD Tests <--*/
 
     @Test
@@ -409,7 +407,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorExistsOnCreate_thenReturnIsCreated() {
+    void whenEmployeeExistsOnCreate_thenReturnIsCreated() {
         EmployeeRequestModel employeeRequestModel = EmployeeRequestModel.builder()
             .firstName("Isaac")
             .lastName("Wallace")
@@ -428,7 +426,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorExistsOnUpdate_thenReturnIsOk() {
+    void whenEmployeeExistsOnUpdate_thenReturnIsOk() {
         EmployeeRequestModel employeeRequestModel = EmployeeRequestModel.builder()
             .firstName("Isaac")
             .lastName("Wallace")
@@ -447,7 +445,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorExistsOnDelete_thenReturnIsNoContent() {
+    void whenEmployeeExistsOnDelete_thenReturnIsNoContent() {
         this.webTestClient.delete()
             .uri(SERVICE_URI + "/" + VALID_ID)
             .exchange()
@@ -457,7 +455,7 @@ class EmployeeControllerIntegrationTest {
     /*--> GET Tests <--*/
 
     @Test
-    void whenAuthorIdIsNotFoundOnGet_thenReturnNotFound() {
+    void whenEmployeeIdIsNotFoundOnGet_thenReturnNotFound() {
         this.webTestClient.get()
             .uri(SERVICE_URI + "/" + NOT_FOUND_ID)
             .exchange()
@@ -467,7 +465,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorIdIsInvalidOnGet_thenReturnUnprocessableEntity() {
+    void whenEmployeeIdIsInvalidOnGet_thenReturnUnprocessableEntity() {
         this.webTestClient.get()
             .uri(SERVICE_URI + "/" + INVALID_ID)
             .exchange()
@@ -479,7 +477,7 @@ class EmployeeControllerIntegrationTest {
     /*--> POST Tests <--*/
 
     @Test
-    void whenAuthorLastNameIsNullOnPost_thenReturnUnprocessableEntity() {
+    void whenEmployeeLastNameIsNullOnPost_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
                 .firstName("John")
                 .lastName(null)
@@ -500,7 +498,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorFirstNameIsNullOnPost_thenReturnUnprocessableEntity() {
+    void whenEmployeeFirstNameIsNullOnPost_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
                 .firstName(null)
                 .lastName("Doe")
@@ -521,7 +519,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorEmailIsNullOnPost_thenReturnUnprocessableEntity() {
+    void whenEmployeeEmailIsNullOnPost_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
                 .firstName("John")
                 .lastName("Doe")
@@ -542,7 +540,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorSalaryIsNullOnPost_thenReturnUnprocessableEntity() {
+    void whenEmployeeSalaryIsNullOnPost_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
                 .firstName("John")
                 .lastName("Doe")
@@ -563,7 +561,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorDobIsNullOnPost_thenReturnUnprocessableEntity() {
+    void whenEmployeeDobIsNullOnPost_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
                 .firstName("John")
                 .lastName("Doe")
@@ -584,7 +582,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorTitleIsNullOnPost_thenReturnUnprocessableEntity() {
+    void whenEmployeeTitleIsNullOnPost_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
                 .firstName("John")
                 .lastName("Doe")
@@ -605,7 +603,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorFirstNameAndLastNameAlreadyExistOnPost_thenReturnConflict() {
+    void whenEmployeeFirstNameAndLastNameAlreadyExistOnPost_thenReturnConflict() {
         Employee newEmployee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
 
         this.employeeRepository.save(newEmployee);
@@ -630,7 +628,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorEmailAlreadyExistsOnPost_thenReturnConflict() {
+    void whenEmployeeEmailAlreadyExistsOnPost_thenReturnConflict() {
         Employee newEmployee = new Employee("Johnny", "Test", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
 
         this.employeeRepository.save(newEmployee);
@@ -657,7 +655,7 @@ class EmployeeControllerIntegrationTest {
     /*--> PUT Tests <--*/
 
     @Test
-    void whenAuthorIdDoesNotExistOnPut_thenReturnNotFound() {
+    void whenEmployeeIdDoesNotExistOnPut_thenReturnNotFound() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
             .firstName("John")
             .lastName("Doe")
@@ -678,7 +676,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorIdIsInvalidOnPut_thenReturnUnprocessableEntity() {
+    void whenEmployeeIdIsInvalidOnPut_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
             .firstName("John")
             .lastName("Doe")
@@ -699,7 +697,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorFirstNameIsNullOnPut_thenReturnUnprocessableEntity() {
+    void whenEmployeeFirstNameIsNullOnPut_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
             .firstName(null)
             .lastName("Doe")
@@ -720,7 +718,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorLastNameIsNullOnPut_thenReturnUnprocessableEntity() {
+    void whenEmployeeLastNameIsNullOnPut_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
             .firstName("John")
             .lastName(null)
@@ -741,7 +739,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorEmailIsNullOnPut_thenReturnUnprocessableEntity() {
+    void whenEmployeeEmailIsNullOnPut_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
             .firstName("John")
             .lastName("Doe")
@@ -762,7 +760,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorDobIsNullOnPut_thenReturnUnprocessableEntity() {
+    void whenEmployeeDobIsNullOnPut_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
             .firstName("John")
             .lastName("Doe")
@@ -783,7 +781,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorSalaryIsNullOnPut_thenReturnUnprocessableEntity() {
+    void whenEmployeeSalaryIsNullOnPut_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
             .firstName("John")
             .lastName("Doe")
@@ -804,7 +802,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorTitleIsNullOnPut_thenReturnUnprocessableEntity() {
+    void whenEmployeeTitleIsNullOnPut_thenReturnUnprocessableEntity() {
         EmployeeRequestModel requestModel = EmployeeRequestModel.builder()
             .firstName("John")
             .lastName("Doe")
@@ -825,7 +823,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorFirstNameAndLastNameAlreadyExistOnPut_thenReturnConflict() {
+    void whenEmployeeFirstNameAndLastNameAlreadyExistOnPut_thenReturnConflict() {
         Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
 
         this.employeeRepository.save(employee);
@@ -850,7 +848,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorEmailAlreadyExistsOnPut_thenReturnConflict() {
+    void whenEmployeeEmailAlreadyExistsOnPut_thenReturnConflict() {
         Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
 
         this.employeeRepository.save(employee);
@@ -877,7 +875,7 @@ class EmployeeControllerIntegrationTest {
     /*--> DELETE Tests <--*/
 
     @Test
-    void whenAuthorIdIsNotFoundOnDelete_thenReturnNotFound() {
+    void whenEmployeeIdIsNotFoundOnDelete_thenReturnNotFound() {
         this.webTestClient.delete()
             .uri(SERVICE_URI + "/" + NOT_FOUND_ID)
             .exchange()
@@ -887,7 +885,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    void whenAuthorIdIsInvalidOnDelete_thenReturnUnprocessableEntity() {
+    void whenEmployeeIdIsInvalidOnDelete_thenReturnUnprocessableEntity() {
         this.webTestClient.delete()
             .uri(SERVICE_URI + "/" + INVALID_ID)
             .exchange()

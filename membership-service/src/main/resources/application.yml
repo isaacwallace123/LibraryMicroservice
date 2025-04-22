@@ -28,10 +28,9 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:h2:mem:library-db;DB_CLOSE_DELAY=-1
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:postgresql://postgres1/membership-db
+    username: membership-db
+    password: pwd
 
   jpa:
     show-sql: true

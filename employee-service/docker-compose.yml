@@ -12,22 +12,22 @@ services:
       - logs:/app/logs
     restart: always
     depends_on:
-      mysql1:
+      employee-mysql:
         condition: service_healthy
     privileged: true
 
-  mysql1:
+  employee-mysql:
     image: mysql:8.0
-    container_name: library-db
+    container_name: employee-db
     ports:
       - "3307:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=pwd
-      - MYSQL_DATABASE=library-db
+      - MYSQL_DATABASE=employee-db
       - MYSQL_USER=user
       - MYSQL_PASSWORD=pwd
     volumes:
-      - ./data/mysql1:/var/lib/mysql1
+      - ./data/employee-mysql:/var/lib/employee-mysql
       - ./data/init.d:/docker-entrypoint-initdb.d
     healthcheck:
       test:
@@ -48,7 +48,7 @@ services:
     image: phpmyadmin:5.2.0
     container_name: PhpMyAdmin
     links:
-      - mysql1
+      - employee-mysql
     restart: always
     ports:
       - 5013:80

@@ -129,15 +129,13 @@ class EmployeeRepositoryTest {
         employee.setEmployeeIdentifier(new EmployeeIdentifier("abc-123"));
         employee.setId(1);
 
-        int hash1 = employee.hashCode();
+        int hash = employee.hashCode();
 
-        assertEquals(hash1, employee.hashCode()); // same hash on repeated calls
+        assertEquals(hash, employee.hashCode()); // same hash on repeated calls
 
         employee.setEmail("NewRandomEmail");
 
-        int hash2 = employee.hashCode();
-
-        assertNotEquals(hash2, hash1);
+        assertNotEquals(hash, employee.hashCode());
     }
 
     @Test
@@ -148,13 +146,11 @@ class EmployeeRepositoryTest {
         this.employeeRepository.save(employee1);
         this.employeeRepository.save(employee2);
 
-        long afterSizeDB = this.employeeRepository.count();
-
         List<Employee> Employees = this.employeeRepository.findAll();
 
         assertNotNull(Employees);
         assertNotEquals(0, Employees.size());
-        assertEquals(afterSizeDB, Employees.size());
+        assertEquals(Employees.size(), this.employeeRepository.count());
     }
 
     @Test

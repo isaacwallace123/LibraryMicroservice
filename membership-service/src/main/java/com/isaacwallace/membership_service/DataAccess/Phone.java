@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,4 +18,9 @@ public class Phone {
     @Enumerated(EnumType.STRING)
     @Column(name = "phone_type")
     private PhoneType type;
+
+    public Phone(@NotNull String number, @NotNull PhoneType type) {
+        this.number = number;
+        this.type = type;
+    }
 }

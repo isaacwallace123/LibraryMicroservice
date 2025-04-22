@@ -1,6 +1,7 @@
 package com.isaacwallace.membership_service.DataAccess;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,4 +26,12 @@ public class Member {
 
     @Embedded
     private Phone phone;
+
+    public Member(@NotNull String firstName, @NotNull String lastName, @NotNull String email, @NotNull Address address, @NotNull Phone phone) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
+        this.phone = phone;
+    }
 }
