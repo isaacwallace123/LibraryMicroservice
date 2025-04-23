@@ -25,8 +25,7 @@ System_Boundary(c1, "Library Management System") {
     Container(is, "inventory-service", "Java, Docker Container", "Provides Internet banking functionality via API")
     Container(as, "author-service", "Java, Docker Container", "Provides Internet banking functionality via API")
     Container(es, "employee-service", "Java, Docker Container", "Provides Internet banking functionality via API")
-    Container(bs, "book-service", "Java, Docker Container", "Provides Internet banking functionality via API")
-    ContainerDb(memb_db, "member-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+    ContainerDb(memb_db, "member-db", "Postgres", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
     ContainerDb(empl_db, "employee-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
     ContainerDb(invent_db, "inventory-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
     ContainerDb(author_db, "author-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
@@ -45,13 +44,10 @@ Rel(api_gateway, es, "Uses", "HTTPS")
 Rel(api_gateway, is, "Uses", "HTTPS")
 Rel(api_gateway, as, "Uses", "HTTPS")
 Rel(api_gateway, ms, "Uses", "HTTPS")
-Rel(api_gateway, bs, "Uses", "HTTPS")
 
-Rel(is, bs, "Uses", "HTTPS")
+Rel(is, as, "Uses", "HTTPS")
 
-Rel(bs, as, "Uses", "HTTPS")
-
-Rel(ts, bs, "Uses", "HTTPS")
+Rel(ts, is, "Uses", "HTTPS")
 Rel(ts, ms, "Uses", "HTTPS")
 Rel(ts, es, "Uses", "HTTPS")
 
@@ -60,6 +56,5 @@ Rel_D(es, empl_db, "reads ...", "JDBC/SQL/TCP")
 Rel_D(is, invent_db, "reads ...", "JDBC/SQL/TCP")
 Rel_D(ms, memb_db, "reads ...", "JDBC/SQL/TCP")
 Rel_D(ts, trans_db, "reads ...", "JDBC/SQL/TCP")
-Rel_D(bs, book_db, "reads ...", "JDBC/SQL/TCP")
 
 @enduml
