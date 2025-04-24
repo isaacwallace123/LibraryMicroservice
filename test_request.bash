@@ -9,7 +9,7 @@ SAMPLE_DATA["employees"]='{"name":"Alice Smith","position":"Manager"}'
 
 declare -A SAMPLE_IDS
 SAMPLE_IDS["members"]="123e4567-e89b-12d3-a456-556642440000"
-SAMPLE_IDS["authors"]="123e4567-e89b-12d3-a456-556642440001"
+SAMPLE_IDS["authors"]="123e4567-e89b-12d3-a456-556642440000"
 SAMPLE_IDS["employees"]="6a8aeaec-cff9-4ace-a8f0-146f8ed180e5"
 
 for resource in members authors employees; do
