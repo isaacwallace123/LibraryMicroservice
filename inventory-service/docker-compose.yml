@@ -1,0 +1,52 @@
+services:
+  book-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: book-service
+    ports:
+      - "8084:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    volumes:
+      - logs:/app/logs
+    restart: always
+    depends_on:
+      book-postgres:
+        condition: service_healthy
+    privileged: true
+
+  book-postgres:
+    image: postgres:latest
+    hostname: book-postgres
+    container_name: book-postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=book-db
+      - PGUSER=book-db
+      - POSTGRES_PASSWORD=pwd
+    volumes:
+      - ./data/book-postgres:/var/lib/postgresql
+      - ./book-service/data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      #      test: ["CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost"]
+      test: "pg_isready -h book-postgres"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin-membership
+    restart: always
+    ports:
+      - 9000:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=8Y2o6@example.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    depends_on:
+      - book-postgres
+
+volumes:
+  logs:
