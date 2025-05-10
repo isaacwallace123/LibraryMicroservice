@@ -1,3 +1,5 @@
+# CHANGELOGS
+
 - Added git-cliff for changelogs managements (45cfdfb)
 - C4 Diagram updated to fit new design suggested by my teacher (951552f)
 - Updated domain model png (30cb529)
