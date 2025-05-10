@@ -1,5 +1,6 @@
-package com.isaacwallace.inventory_service.Book.Presentation.Models;
+package com.isaacwallace.inventory_service.Presentation.Models;
 
+import com.isaacwallace.inventory_service.DataAccess.Availability;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,4 +15,8 @@ public class BookResponseModel {
     private String publisher;
 
     private LocalDateTime released;
+
+    private Integer stock;
+
+    private Availability availability;
 }

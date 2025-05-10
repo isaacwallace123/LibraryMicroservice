@@ -1,8 +1,8 @@
-package com.isaacwallace.inventory_service.Book.Mapper;
+package com.isaacwallace.inventory_service.Mapper;
 
-import com.isaacwallace.inventory_service.Book.DataAccess.Book;
-import com.isaacwallace.inventory_service.Book.DataAccess.BookIdentifier;
-import com.isaacwallace.inventory_service.Book.Presentation.Models.BookRequestModel;
+import com.isaacwallace.inventory_service.DataAccess.Book;
+import com.isaacwallace.inventory_service.DataAccess.BookIdentifier;
+import com.isaacwallace.inventory_service.Presentation.Models.BookRequestModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

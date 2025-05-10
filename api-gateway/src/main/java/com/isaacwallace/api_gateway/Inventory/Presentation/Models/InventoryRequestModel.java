@@ -17,4 +17,6 @@ public class InventoryRequestModel extends RepresentationModel<InventoryRequestM
     String publisher;
 
     LocalDateTime released;
+
+    Integer stock;
 }

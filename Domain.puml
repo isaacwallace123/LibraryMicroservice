@@ -122,22 +122,7 @@ rectangle "Library Management" as BoundedContextSocialMedia #line.dashed {
     }
 
     package "Inventory Sub-Domain" #LightSkyBlue {
-        AGGREGATE_ROOT(Inventory) #lightblue {
-            inventoryId: UUID
-            bookId: UUID
-            quantity: Integer
-            status: InventoryStatus
-        }
-
-        VALUE_OBJECT(InventoryIdentifier) #Bisque {
-            inventoryId: UUID
-        }
-
-        VALUE_OBJECT(BookStock) #Bisque {
-            quantity: Integer
-        }
-
-        ENUM(InventoryStatus) #SandyBrown {
+        ENUM(BookStatus) #SandyBrown {
             AVAILABLE,
             UNAVAILABLE
         }
@@ -149,6 +134,7 @@ rectangle "Library Management" as BoundedContextSocialMedia #line.dashed {
             genre: String
             publisher: String
             released: DateTime
+            stock: Integer
         }
 
         VALUE_OBJECT(BookIdentifier) #Bisque {
@@ -157,11 +143,7 @@ rectangle "Library Management" as BoundedContextSocialMedia #line.dashed {
 
         Book "1" o--> "1" BookIdentifier
         Book "1" o--> "1" MemberIdentifier
-
-        Inventory "1" o--> "1" InventoryIdentifier
-        Inventory --> InventoryStatus
-        Inventory "1" o--> "1..*" Book
-        Inventory --> BookStock
+        Book --> BookStatus
     }
 
     package "Employee Sub-Domain" #Violet {
@@ -192,7 +174,6 @@ rectangle "Library Management" as BoundedContextSocialMedia #line.dashed {
     }
 
     Book "1" o--> "1" AuthorIdentifier
-    Book "1" o--> "*" InventoryIdentifier
 
     Transaction "1" o--> "1" EmployeeIdentifier
     Transaction "1" o--> "1" BookIdentifier

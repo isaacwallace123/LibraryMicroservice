@@ -16,10 +16,10 @@ services:
         condition: service_healthy
     privileged: true
 
-  postgres1:
+  membership-postgres:
     image: postgres:latest
-    hostname: postgres1
-    container_name: postgres1
+    hostname: membership-postgres
+    container_name: membership-postgres
     ports:
       - 5432:5432
     environment:
@@ -27,11 +27,11 @@ services:
       - PGUSER=membership-db
       - POSTGRES_PASSWORD=pwd
     volumes:
-      - ./data/postgres1:/var/lib/postgresql
+      - ./data/membership-postgres:/var/lib/postgresql
       - ./membership-service/data/init.d:/docker-entrypoint-initdb.d
     healthcheck:
       #      test: ["CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost"]
-      test: "pg_isready -h postgres1"
+      test: "pg_isready -h membership-postgres"
       interval: 10s
       timeout: 5s
       retries: 5
@@ -46,7 +46,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=8Y2o6@example.com
       - PGADMIN_DEFAULT_PASSWORD=admin
     depends_on:
-      - postgres1
+      - membership-postgres
 
 volumes:
   logs:

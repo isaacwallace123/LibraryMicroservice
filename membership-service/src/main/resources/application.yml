@@ -28,7 +28,7 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:postgresql://postgres1/membership-db
+    url: jdbc:postgresql://membership-postgres/membership-db
     username: membership-db
     password: pwd
 
@@ -56,7 +56,7 @@ spring:
 # For Docker
 spring:
   datasource:
-    url: jdbc:postgresql://postgres1/membership-db
+    url: jdbc:postgresql://membership-postgres/membership-db
     username: membership-db
     password: pwd
 

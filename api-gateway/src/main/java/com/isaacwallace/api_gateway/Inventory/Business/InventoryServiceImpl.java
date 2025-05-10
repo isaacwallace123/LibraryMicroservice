@@ -44,7 +44,7 @@ public class InventoryServiceImpl implements InventoryService {
 
     private InventoryResponseModel addLinks(InventoryResponseModel inventoryResponseModel) {
         Link selfLink = linkTo(methodOn(InventoryController.class)
-                .getInventoryById(inventoryResponseModel.getInventoryid()))
+                .getInventoryById(inventoryResponseModel.getBookid()))
                 .withSelfRel();
         inventoryResponseModel.add(selfLink);
 

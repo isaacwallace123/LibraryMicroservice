@@ -1,8 +1,8 @@
-package com.isaacwallace.inventory_service.Book.Presentation;
+package com.isaacwallace.inventory_service.Presentation;
 
-import com.isaacwallace.inventory_service.Book.Business.BookService;
-import com.isaacwallace.inventory_service.Book.Presentation.Models.BookRequestModel;
-import com.isaacwallace.inventory_service.Book.Presentation.Models.BookResponseModel;
+import com.isaacwallace.inventory_service.Business.BookService;
+import com.isaacwallace.inventory_service.Presentation.Models.BookRequestModel;
+import com.isaacwallace.inventory_service.Presentation.Models.BookResponseModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/books")
+@RequestMapping("api/v1/inventory")
 public class BookController {
     private final BookService bookService;
 

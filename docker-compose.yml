@@ -140,6 +140,7 @@ services:
       - author-service
       - membership-service
       - employee-service
+      - inventory-service
     privileged: true
 
   # SERVICES

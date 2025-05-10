@@ -1,7 +1,7 @@
-package com.isaacwallace.inventory_service.Book.Business;
+package com.isaacwallace.inventory_service.Business;
 
-import com.isaacwallace.inventory_service.Book.Presentation.Models.BookRequestModel;
-import com.isaacwallace.inventory_service.Book.Presentation.Models.BookResponseModel;
+import com.isaacwallace.inventory_service.Presentation.Models.BookRequestModel;
+import com.isaacwallace.inventory_service.Presentation.Models.BookResponseModel;
 
 import java.util.List;
 

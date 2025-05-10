@@ -1,4 +1,4 @@
-package com.isaacwallace.inventory_service.Book.DataAccess;
+package com.isaacwallace.inventory_service.DataAccess;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

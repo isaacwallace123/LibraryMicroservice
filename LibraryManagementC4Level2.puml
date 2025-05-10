@@ -30,7 +30,6 @@ System_Boundary(c1, "Library Management System") {
     ContainerDb(invent_db, "inventory-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
     ContainerDb(author_db, "author-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
     ContainerDb(trans_db, "transaction-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
-    ContainerDb(book_db, "book-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
 }
 
 Rel_Neighbor(web_app, spa, "Delivers")

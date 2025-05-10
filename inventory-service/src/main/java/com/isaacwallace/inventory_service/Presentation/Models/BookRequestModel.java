@@ -1,4 +1,4 @@
-package com.isaacwallace.inventory_service.Book.Presentation.Models;
+package com.isaacwallace.inventory_service.Presentation.Models;
 
 import lombok.*;
 
@@ -16,4 +16,6 @@ public class BookRequestModel {
     String publisher;
 
     LocalDateTime released;
+
+    Integer stock;
 }

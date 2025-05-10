@@ -38,7 +38,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: pgadmin-membership
+    container_name: pgadmin
     restart: always
     ports:
       - 9000:80

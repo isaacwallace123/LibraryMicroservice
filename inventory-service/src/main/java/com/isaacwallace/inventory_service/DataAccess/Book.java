@@ -1,4 +1,4 @@
-package com.isaacwallace.inventory_service.Book.DataAccess;
+package com.isaacwallace.inventory_service.DataAccess;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -27,4 +27,6 @@ public class Book {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime released;
+
+    private Integer stock;
 }

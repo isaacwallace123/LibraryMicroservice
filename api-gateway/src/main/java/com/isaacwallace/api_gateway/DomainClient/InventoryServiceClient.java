@@ -28,7 +28,7 @@ public class InventoryServiceClient {
 
     private String SERVICE_BASE_URL;
 
-    public InventoryServiceClient(RestTemplate restTemplate, ObjectMapper mapper, @Value("${app.book-service.host}") String SERVICE_HOST, @Value("${app.book-service.port}") String SERVICE_PORT) {
+    public InventoryServiceClient(RestTemplate restTemplate, ObjectMapper mapper, @Value("${app.inventory-service.host}") String SERVICE_HOST, @Value("${app.inventory-service.port}") String SERVICE_PORT) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
 

@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS book;
-DROP TABLE IF EXISTS inventories;
 
 CREATE TABLE IF NOT EXISTS book (
     id SERIAL PRIMARY KEY,
@@ -9,13 +8,6 @@ CREATE TABLE IF NOT EXISTS book (
     title VARCHAR(255) NOT NULL,
     genre VARCHAR(100),
     publisher VARCHAR(100),
-    released TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS inventories (
-    id SERIAL PRIMARY KEY,
-    inventoryid VARCHAR(50) UNIQUE NOT NULL,
-    bookid VARCHAR(50) NOT NULL,
-
-    quantity INTEGER NOT NULL
+    released TIMESTAMP,
+    stock INTEGER
 );
