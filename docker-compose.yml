@@ -65,16 +65,19 @@ services:
       - employee-mysql
     restart: always
     ports:
-      - 5013:80
+      - "5013:80"
     environment:
       - PMA_ARBITRARY=1
+    depends_on:
+      - author-mysql
+      - employee-mysql
 
   membership-postgres:
     image: postgres:latest
-    hostname: postgres1
-    container_name: postgres1
+    hostname: membership-postgres
+    container_name: membership-postgres
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       - POSTGRES_USER=membership-db
       - PGUSER=membership-db
@@ -83,7 +86,27 @@ services:
       - ./data/membership-postgres:/var/lib/postgresql
       - ./membership-service/data/init.d:/docker-entrypoint-initdb.d
     healthcheck:
-      test: "pg_isready -h postgres1"
+      test: "pg_isready -h membership-postgres"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  inventory-postgres:
+    image: postgres:latest
+    hostname: inventory-postgres
+    container_name: inventory-postgres
+    ports:
+      - "5431:5432"
+    environment:
+      - POSTGRES_USER=inventory-db
+      - PGUSER=inventory-db
+      - POSTGRES_PASSWORD=pwd
+    volumes:
+      - ./data/inventory-postgres:/var/lib/postgresql
+      - ./book-service/data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      #      test: ["CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost"]
+      test: "pg_isready -h inventory-postgres"
       interval: 10s
       timeout: 5s
       retries: 5
@@ -93,12 +116,13 @@ services:
     container_name: PostgresAdmin
     restart: always
     ports:
-      - 9000:80
+      - "9000:80"
     environment:
       - PGADMIN_DEFAULT_EMAIL=8Y2o6@example.com
       - PGADMIN_DEFAULT_PASSWORD=admin
     depends_on:
       - membership-postgres
+      - inventory-postgres
 
   # API GATEWAY
 
@@ -168,6 +192,23 @@ services:
     restart: always
     depends_on:
       employee-mysql:
+        condition: service_healthy
+    privileged: true
+
+  inventory-service:
+    build:
+      context: inventory-service
+      dockerfile: Dockerfile
+    hostname: inventory-service
+    ports:
+      - "8084:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    volumes:
+      - logs:/app/logs
+    restart: always
+    depends_on:
+      inventory-postgres:
         condition: service_healthy
     privileged: true
 

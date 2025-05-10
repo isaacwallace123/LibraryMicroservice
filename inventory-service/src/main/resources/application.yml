@@ -28,9 +28,9 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:postgresql://book-postgres/book-db
-    username: book-postgres
-    password: book-postgres
+    url: jdbc:postgresql://inventory-postgres/inventory-db
+    username: inventory-postgres
+    password: inventory-postgres
 
   jpa:
     show-sql: true
@@ -56,8 +56,8 @@ spring:
 # For Docker
 spring:
   datasource:
-    url: jdbc:postgresql://book-postgres/book-db
-    username: book-db
+    url: jdbc:postgresql://inventory-postgres/inventory-db
+    username: inventory-db
     password: pwd
 
   jpa:

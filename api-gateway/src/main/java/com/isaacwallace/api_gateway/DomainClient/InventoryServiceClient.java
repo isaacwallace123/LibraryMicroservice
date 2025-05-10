@@ -1,8 +1,8 @@
 package com.isaacwallace.api_gateway.DomainClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.isaacwallace.api_gateway.Membership.Presentation.Models.MembershipRequestModel;
-import com.isaacwallace.api_gateway.Membership.Presentation.Models.MembershipResponseModel;
+import com.isaacwallace.api_gateway.Inventory.Presentation.Models.InventoryRequestModel;
+import com.isaacwallace.api_gateway.Inventory.Presentation.Models.InventoryResponseModel;
 import com.isaacwallace.api_gateway.Utils.Exceptions.DuplicateResourceException;
 import com.isaacwallace.api_gateway.Utils.Exceptions.HttpErrorInfo;
 import com.isaacwallace.api_gateway.Utils.Exceptions.InvalidInputException;
@@ -22,24 +22,24 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class MembershipServiceClient {
+public class InventoryServiceClient {
     private final RestTemplate restTemplate;
     private final ObjectMapper mapper;
 
     private String SERVICE_BASE_URL;
 
-    public MembershipServiceClient(RestTemplate restTemplate, ObjectMapper mapper, @Value("${app.membership-service.host}") String SERVICE_HOST, @Value("${app.membership-service.port}") String SERVICE_PORT) {
+    public InventoryServiceClient(RestTemplate restTemplate, ObjectMapper mapper, @Value("${app.book-service.host}") String SERVICE_HOST, @Value("${app.book-service.port}") String SERVICE_PORT) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
 
-        this.SERVICE_BASE_URL = "http://" + SERVICE_HOST + ":" + SERVICE_PORT + "/api/v1/members";
+        this.SERVICE_BASE_URL = "http://" + SERVICE_HOST + ":" + SERVICE_PORT + "/api/v1/inventory";
     }
 
-    public List<MembershipResponseModel> getMembers() {
+    public List<InventoryResponseModel> getInventorys() {
         try {
-            log.debug("membership-service URL is {}", SERVICE_BASE_URL);
+            log.debug("inventory-service URL is {}", SERVICE_BASE_URL);
 
-            ResponseEntity<List<MembershipResponseModel>> response = restTemplate.exchange(SERVICE_BASE_URL, HttpMethod.GET, null, new ParameterizedTypeReference<List<MembershipResponseModel>>() {});
+            ResponseEntity<List<InventoryResponseModel>> response = restTemplate.exchange(SERVICE_BASE_URL, HttpMethod.GET, null, new ParameterizedTypeReference<List<InventoryResponseModel>>() {});
 
             return response.getBody();
         } catch (HttpClientErrorException ex) {
@@ -48,43 +48,47 @@ public class MembershipServiceClient {
         }
     }
 
-    public MembershipResponseModel getMemberByMemberId(String memberid) {
-        try {
-            log.debug("membership-service URL is {}", SERVICE_BASE_URL + "/" + memberid);
 
-            return this.restTemplate.getForObject(SERVICE_BASE_URL + "/" + memberid, MembershipResponseModel.class);
+    public InventoryResponseModel getInventoryByInventoryId(String inventoryid) {
+        try {
+            log.debug("inventory-service URL is {}", SERVICE_BASE_URL + "/" + inventoryid);
+
+            return this.restTemplate.getForObject(SERVICE_BASE_URL + "/" + inventoryid, InventoryResponseModel.class);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
     }
 
-    public MembershipResponseModel addMember(MembershipRequestModel membershipRequestModel) {
-        try {
-            log.debug("membership-service URL is {}", SERVICE_BASE_URL);
 
-            return this.restTemplate.postForObject(SERVICE_BASE_URL, membershipRequestModel, MembershipResponseModel.class);
+    public InventoryResponseModel addInventory(InventoryRequestModel inventoryRequestModel) {
+        try {
+            log.debug("inventory-service URL is {}", SERVICE_BASE_URL);
+
+            return this.restTemplate.postForObject(SERVICE_BASE_URL, inventoryRequestModel, InventoryResponseModel.class);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
     }
 
-    public MembershipResponseModel updateMember(String memberid, MembershipRequestModel membershipRequestModel) {
+
+    public InventoryResponseModel updateInventory(String inventoryid, InventoryRequestModel inventoryRequestModel) {
         try {
-            log.debug("membership-service URL is {}", SERVICE_BASE_URL + "/" + memberid);
+            log.debug("inventory-service URL is {}", SERVICE_BASE_URL + "/" + inventoryid);
 
-            this.restTemplate.put(SERVICE_BASE_URL + "/" + memberid, membershipRequestModel);
+            this.restTemplate.put(SERVICE_BASE_URL + "/" + inventoryid, inventoryRequestModel);
 
-            return this.getMemberByMemberId(memberid);
+            return this.getInventoryByInventoryId(inventoryid);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
     }
 
-    public void deleteMember(String memberid) {
-        try {
-            log.debug("membership-service URL is {}", SERVICE_BASE_URL + "/" + memberid);
 
-            this.restTemplate.delete(SERVICE_BASE_URL + "/" + memberid);
+    public void deleteInventory(String inventoryid) {
+        try {
+            log.debug("inventory-service URL is {}", SERVICE_BASE_URL + "/" + inventoryid);
+
+            this.restTemplate.delete(SERVICE_BASE_URL + "/" + inventoryid);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }

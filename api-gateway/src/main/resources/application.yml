@@ -33,3 +33,6 @@ app:
   employee-service:
     host: employee-service
     port: 8080
+  inventory-service:
+    host: inventory-service
+    port: 8080
