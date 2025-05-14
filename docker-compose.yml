@@ -1,5 +1,5 @@
 services:
-  # DATABASES, ADMIN VIEWERS AND STUFF
+  # DATABASES
 
   employee-mysql:
     image: mysql:8.0
@@ -57,21 +57,6 @@ services:
       timeout: 5s
       retries: 10
 
-  phpmyadmin:
-    image: phpmyadmin:5.2.0
-    container_name: PhpMyAdmin
-    links:
-      - author-mysql
-      - employee-mysql
-    restart: always
-    ports:
-      - "5013:80"
-    environment:
-      - PMA_ARBITRARY=1
-    depends_on:
-      - author-mysql
-      - employee-mysql
-
   membership-postgres:
     image: postgres:latest
     hostname: membership-postgres
@@ -110,6 +95,59 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  transaction-mongodb:
+    image: mongo:5.0
+    container_name: transaction-mongodb
+    hostname: transaction-mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data
+
+    environment:
+      - MONGO_INITDB_DATABASE=transaction-mongodb
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=pwd
+      - MONGO_INITDB_DATABASE=transactions
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')", "--username", "user", "--password", "pwd", "--authenticationDatabase", "admin" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # DATABASE TOOLS
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo_express
+    restart: always
+    ports:
+      - 8086:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: transaction-mongodb
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: user
+      ME_CONFIG_MONGODB_ADMINPASSWORD: pwd
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+    depends_on:
+      - transaction-mongodb
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.0
+    container_name: PhpMyAdmin
+    links:
+      - author-mysql
+      - employee-mysql
+    restart: always
+    ports:
+      - "5013:80"
+    environment:
+      - PMA_ARBITRARY=1
+    depends_on:
+      - author-mysql
+      - employee-mysql
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -213,5 +251,23 @@ services:
         condition: service_healthy
     privileged: true
 
+  transaction-service:
+    build:
+      context: transaction-service
+      dockerfile: Dockerfile
+    hostname: transaction-service
+    ports:
+      - "8085:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    volumes:
+      - logs:/app/logs
+    restart: always
+    depends_on:
+      transaction-mongodb:
+        condition: service_healthy
+    privileged: true
+
 volumes:
-  logs:
+  logs: {}
+  mongo: {}

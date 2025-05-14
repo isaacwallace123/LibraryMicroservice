@@ -1,7 +1,5 @@
 package com.isaacwallace.transaction_service.DomainClient.Membership.Models;
 
-import com.isaacwallace.membership_service.DataAccess.Address;
-import com.isaacwallace.membership_service.DataAccess.Phone;
 import lombok.Builder;
 import lombok.Data;
 

@@ -62,7 +62,7 @@ public class BookServiceImpl implements BookService {
     }
 
     public List<BookResponseModel> getAllBooks() {
-        return this.bookResponseMapper.entityToResponseModelList(this.bookRepository.findAll(), authorServiceClient);
+        return this.bookResponseMapper.entitiesToResponseModelList(this.bookRepository.findAll(), authorServiceClient);
     }
 
     public BookResponseModel getBookById(String bookid) {

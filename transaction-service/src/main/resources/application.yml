@@ -11,8 +11,9 @@ logging:
   level:
     root: INFO
     com.isaacwallace: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.boot.test: DEBUG
+    de.flapdoodle.embed.mongo: DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
 
 app:
   membership-service:
@@ -26,68 +27,56 @@ app:
     port: 8080
 
 ---
-# For test
-
-# For h2
-spring:
-  config:
-    activate:
-      on-profile: h2
-
-  h2:
-    console:
-      enabled: true
-
-  datasource:
-    url: jdbc:postgresql://inventory-postgres/inventory-db
-    username: inventory-postgres
-    password: inventory-postgres
-
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: create
-
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        auto-quote-keyword: true
-
-    defer-datasource-initialization: true
-
-  sql:
-    init:
-      platform: h2
-      mode: always
-
-
----
 # For prod
 
 # For Docker
 spring:
-  datasource:
-    url: jdbc:postgresql://inventory-postgres/inventory-db
-    username: inventory-db
-    password: pwd
-
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: none
-
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-      defer-datasource-initialization: true
-
   config:
     activate:
       on-profile: docker
+  data:
+    mongodb:
+      # uri: mongodb://user:pwd@transaction-mongodb:27017/transactions
+      host: transaction-mongodb
+      port: 27017
+      username: user
+      password: pwd
+      authentication-database: admin
+      database: transactions
 
-  sql:
-    init:
-      platform: psql
-      mode: always
-      schema-locations: classpath:schema-psql.sql
-      data-locations: classpath:data-psql.sql
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    org.mongodb.driver: DEBUG
+
+
+server:
+  port: 8080
+
+---
+# For Testing
+
+spring:
+  config:
+    activate:
+      on-profile: test
+  data:
+    mongodb:
+      #      host: localhost
+      port: 0 # random port for embedded MongoDB
+      database: transactionsCaseTestDb
+      #      username: user
+      #      password: pwd
+      #      authentication-database: admin
+
+      auto-index-creation: true
+logging:
+  level:
+    root: INFO
+    com.isaacwallace: DEBUG
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 5.0.5

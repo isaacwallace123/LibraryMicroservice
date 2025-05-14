@@ -1,0 +1,83 @@
+[
+  {
+    "transactionIdentifier": { "transactionid": "8b0a2c1b-734f-4cb1-b123-5f1e3e2b5a4f" },
+    "memberid": "823e4567-e89b-12d3-a456-556642440007",
+    "bookid": "c1e2b3d4-5f6e-7a8b-9c0d-a112b2c3d4e5",
+    "employeeid": "61d2d9f8-e144-4984-8bcb-7fa29ef4fdf6",
+    "transactionDate": "2025-05-14T13:00:00",
+    "status": "PENDING",
+    "payment": { "method": "CREDIT", "currency": "USD", "amount": 23.45 }
+  },
+  {
+    "transactionIdentifier": { "transactionid": "e61f972b-b5ad-4d2e-b43a-83776bc9dc6d" },
+    "memberid": "123e4567-e89b-12d3-a456-556642440000",
+    "bookid": "g6i7e8f9-0f2e-3d5b-4c3d-e556f7g8i9j0",
+    "employeeid": "710d4d5c-7243-47e7-bf10-9efb08740974",
+    "transactionDate": "2025-05-14T13:00:00",
+    "status": "COMPLETED",
+    "payment": { "method": "DEBIT", "currency": "CAD", "amount": 18.75 }
+  },
+  {
+    "transactionIdentifier": { "transactionid": "1d22efb9-cf6a-47d4-a683-0c95b0f7aaf7" },
+    "memberid": "223e4567-e89b-12d3-a456-556642440001",
+    "bookid": "h7j8f9g0-1f3e-4d6b-5c4d-f667g8i0j1k1",
+    "employeeid": "f1a83c15-3c1d-48cb-a4e7-3e96aa6d4ef3",
+    "transactionDate": "2025-05-14T13:00:00",
+    "status": "CANCELED",
+    "payment": { "method": "CASH", "currency": "EUR", "amount": 5.50 }
+  },
+  {
+    "transactionIdentifier": { "transactionid": "dfc25b13-502b-4d2d-80e5-8c7c4869f7ad" },
+    "memberid": "723e4567-e89b-12d3-a456-556642440006",
+    "bookid": "f5h6d7e8-9f1e-2d4b-3c2d-d445e6f7g809",
+    "employeeid": "2980698b-82b5-42fd-8dbb-33255eb637ed",
+    "transactionDate": "2025-05-14T13:00:00",
+    "status": "COMPLETED",
+    "payment": { "method": "CREDIT", "currency": "CAD", "amount": 14.25 }
+  },
+  {
+    "transactionIdentifier": { "transactionid": "a5a6a7a8-b5b5-4c5c-9d9d-eeeeeeeeeeee" },
+    "memberid": "323e4567-e89b-12d3-a456-556642440002",
+    "bookid": "k0m1i2j3-4f6e-7d9b-8c7d-i990j1k3l414",
+    "employeeid": "5aa1428a-a785-44f9-81cf-8545650251ed",
+    "transactionDate": "2025-05-14T13:00:00",
+    "status": "PENDING",
+    "payment": { "method": "DEBIT", "currency": "USD", "amount": 29.99 }
+  },
+  {
+    "transactionIdentifier": { "transactionid": "f7d16f24-0a4b-43df-9fcb-9bd8c1f0aa67" },
+    "memberid": "523e4567-e89b-12d3-a456-556642440004",
+    "bookid": "j9l0h1i2-3f5e-6d8b-7c6d-h889i0j2k313",
+    "employeeid": "eec58e2f-44ad-41fb-b4cb-59b1ae89a68f",
+    "transactionDate": "2025-05-14T13:00:00",
+    "status": "COMPLETED",
+    "payment": { "method": "CASH", "currency": "USD", "amount": 7.99 }
+  },
+  {
+    "transactionIdentifier": { "transactionid": "fe1c28bd-4af3-4b7a-90d7-f871f4e070ad" },
+    "memberid": "423e4567-e89b-12d3-a456-556642440003",
+    "bookid": "e4g5c6d7-8f9e-0d3b-1c2d-c334d5e6f7g8",
+    "employeeid": "b139a9b1-6c37-486b-80b3-5e2e0b3d90fa",
+    "transactionDate": "2025-05-14T13:00:00",
+    "status": "CANCELED",
+    "payment": { "method": "CREDIT", "currency": "EUR", "amount": 12.99 }
+  },
+  {
+    "transactionIdentifier": { "transactionid": "d50a8c92-f0e5-4aaf-8e4f-f8ad6e3a7b34" },
+    "memberid": "923e4567-e89b-12d3-a456-556642440008",
+    "bookid": "i8k9g0h1-2f4e-5d7b-6c5d-g778h9j1k212",
+    "employeeid": "e1b6f6d9-2c44-45da-bf7e-3d93f3a7c6a1",
+    "transactionDate": "2025-05-14T13:00:00",
+    "status": "PENDING",
+    "payment": { "method": "DEBIT", "currency": "USD", "amount": 15.00 }
+  },
+  {
+    "transactionIdentifier": { "transactionid": "cc55b880-b78e-403e-b02b-4d4dfba3315a" },
+    "memberid": "a23e4567-e89b-12d3-a456-556642440009",
+    "bookid": "l1n2j3k4-5f7e-8d0b-9c8d-j101k2l4n515",
+    "employeeid": "8da6cebf-5868-456f-959f-ff6725310d78",
+    "transactionDate": "2025-05-14T13:00:00",
+    "status": "COMPLETED",
+    "payment": { "method": "CREDIT", "currency": "CAD", "amount": 21.99 }
+  }
+]

@@ -1,0 +1,54 @@
+services:
+  transaction-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: transaction-service
+    ports:
+      - "8085:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    volumes:
+      - logs:/app/logs
+    restart: always
+    depends_on:
+      transaction-mongodb:
+        condition: service_healthy
+    privileged: true
+
+  transaction-mongodb:
+    image: mongo:5.0
+    container_name: transaction-mongodb
+    hostname: transaction-mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data
+
+    environment:
+      - MONGO_INITDB_DATABASE=transaction-mongodb
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=pwd
+      - MONGO_INITDB_DATABASE=transactions
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')", "--username", "user", "--password", "pwd", "--authenticationDatabase", "admin" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo_express
+    restart: always
+    ports:
+      - 8086:8081
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=transaction-mongodb
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=user
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=pwd
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+volumes:
+  logs:
