@@ -27,9 +27,9 @@ System_Boundary(c1, "Library Management System") {
     Container(es, "employee-service", "Java, Docker Container", "Provides Internet banking functionality via API")
     ContainerDb(memb_db, "member-db", "Postgres", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
     ContainerDb(empl_db, "employee-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
-    ContainerDb(invent_db, "inventory-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+    ContainerDb(invent_db, "inventory-db", "Postgres", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
     ContainerDb(author_db, "author-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
-    ContainerDb(trans_db, "transaction-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+    ContainerDb(trans_db, "transaction-db", "MongoDB", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
 }
 
 Rel_Neighbor(web_app, spa, "Delivers")

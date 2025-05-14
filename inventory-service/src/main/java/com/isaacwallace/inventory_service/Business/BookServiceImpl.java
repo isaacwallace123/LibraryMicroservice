@@ -22,6 +22,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookResponseMapper bookResponseMapper;
     private final BookRequestMapper bookRequestMapper;
+
     private final AuthorServiceClient authorServiceClient;
 
     public BookServiceImpl(BookRepository bookRepository, BookResponseMapper bookResponseMapper, BookRequestMapper bookRequestMapper, AuthorServiceClient authorServiceClient) {
@@ -57,11 +58,11 @@ public class BookServiceImpl implements BookService {
             throw new InvalidInputException("Book stock cannot be negative.");
         }
 
-        this.authorServiceClient.validateAuthorExists(book.getAuthorid());
+        this.authorServiceClient.getAuthorById(book.getAuthorid());
     }
 
     public List<BookResponseModel> getAllBooks() {
-        return this.bookResponseMapper.entityToResponseModelList(this.bookRepository.findAll());
+        return this.bookResponseMapper.entityToResponseModelList(this.bookRepository.findAll(), authorServiceClient);
     }
 
     public BookResponseModel getBookById(String bookid) {
@@ -71,7 +72,7 @@ public class BookServiceImpl implements BookService {
             throw new NotFoundException("Unknown bookid: " + bookid);
         }
 
-        return this.bookResponseMapper.entityToResponseModel(book);
+        return this.bookResponseMapper.entityToResponseModel(book, authorServiceClient);
     }
 
     public BookResponseModel addBook(BookRequestModel bookRequestModel) {
@@ -83,7 +84,7 @@ public class BookServiceImpl implements BookService {
             throw new DuplicateResourceException("Book with title " + book.getTitle() + ", genre " + book.getGenre() + ", and publisher " + book.getPublisher() + " already exists.");
         }
 
-        return this.bookResponseMapper.entityToResponseModel(this.bookRepository.save(book));
+        return this.bookResponseMapper.entityToResponseModel(this.bookRepository.save(book), authorServiceClient);
     }
 
     public BookResponseModel updateBook(String bookid, BookRequestModel bookRequestModel) {
@@ -99,7 +100,7 @@ public class BookServiceImpl implements BookService {
 
         log.info("Updated book with bookid: {}", bookid);
 
-        return this.bookResponseMapper.entityToResponseModel(this.bookRepository.save(book));
+        return this.bookResponseMapper.entityToResponseModel(this.bookRepository.save(book), authorServiceClient);
     }
 
     public void deleteBook(String bookid) {

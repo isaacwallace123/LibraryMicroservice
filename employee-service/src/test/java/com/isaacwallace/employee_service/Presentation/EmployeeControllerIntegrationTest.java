@@ -2,7 +2,7 @@ package com.isaacwallace.employee_service.Presentation;
 
 import com.isaacwallace.employee_service.DataAccess.Employee;
 import com.isaacwallace.employee_service.DataAccess.EmployeeRepository;
-import com.isaacwallace.employee_service.DataAccess.EmployeeTitle;
+import com.isaacwallace.employee_service.DataAccess.Title;
 import com.isaacwallace.employee_service.Presentation.Models.EmployeeRequestModel;
 import com.isaacwallace.employee_service.Presentation.Models.EmployeeResponseModel;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,7 +58,7 @@ class EmployeeControllerIntegrationTest {
                     .email("email" + i + "@email.com")
                     .salary(1000.00)
                     .dob(LocalDate.of(2000 + i, 1, 1))
-                    .title(EmployeeTitle.ADMINISTRATOR)
+                    .title(Title.ADMINISTRATOR)
                     .build();
 
             this.webTestClient.post()
@@ -100,7 +99,7 @@ class EmployeeControllerIntegrationTest {
                 .lastName("Wallace")
                 .dob(LocalDate.of(1995, 10, 5))
                 .email("isaac@example.com")
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .salary(90000.0)
                 .build();
 
@@ -109,7 +108,7 @@ class EmployeeControllerIntegrationTest {
                 .lastName("Wallace")
                 .dob(LocalDate.of(1995, 10, 5))
                 .email("isaac@example.com")
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .salary(90000.0)
                 .build();
 
@@ -118,7 +117,7 @@ class EmployeeControllerIntegrationTest {
                 .lastName("Wallace")
                 .dob(LocalDate.of(1990, 1, 1))
                 .email("different@example.com")
-                .title(EmployeeTitle.MANAGER)
+                .title(Title.MANAGER)
                 .salary(100000.0)
                 .build();
 
@@ -139,7 +138,7 @@ class EmployeeControllerIntegrationTest {
                 .lastName("Wallace")
                 .dob(dob)
                 .email("isaac@example.com")
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .salary(90000.0)
                 .build();
 
@@ -147,7 +146,7 @@ class EmployeeControllerIntegrationTest {
         assertEquals("Wallace", model.getLastName());
         assertEquals(dob, model.getDob());
         assertEquals("isaac@example.com", model.getEmail());
-        assertEquals(EmployeeTitle.ADMINISTRATOR, model.getTitle());
+        assertEquals(Title.ADMINISTRATOR, model.getTitle());
         assertEquals(90000.0, model.getSalary());
     }
 
@@ -160,7 +159,7 @@ class EmployeeControllerIntegrationTest {
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         assertEquals("Isaac", model.getFirstName());
@@ -168,7 +167,7 @@ class EmployeeControllerIntegrationTest {
         assertEquals(LocalDate.of(2000, 1, 1), model.getDob());
         assertEquals("IsaacWallace@me.com", model.getEmail());
         assertEquals(1000.00, model.getSalary());
-        assertEquals(EmployeeTitle.ADMINISTRATOR, model.getTitle());
+        assertEquals(Title.ADMINISTRATOR, model.getTitle());
     }
 
     @Test
@@ -179,7 +178,7 @@ class EmployeeControllerIntegrationTest {
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         EmployeeRequestModel model2 = EmployeeRequestModel.builder()
@@ -188,7 +187,7 @@ class EmployeeControllerIntegrationTest {
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         assertEquals(model, model2);
@@ -203,7 +202,7 @@ class EmployeeControllerIntegrationTest {
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         assertTrue(model.toString().contains("Isaac"));
@@ -237,7 +236,7 @@ class EmployeeControllerIntegrationTest {
                 .age(30)
                 .dob(LocalDate.of(1990, 1, 1))
                 .email("john.doe@example.com")
-                .title(EmployeeTitle.MANAGER)
+                .title(Title.MANAGER)
                 .salary(85000.0)
                 .build();
 
@@ -248,7 +247,7 @@ class EmployeeControllerIntegrationTest {
                 .age(30)
                 .dob(LocalDate.of(1990, 1, 1))
                 .email("john.doe@example.com")
-                .title(EmployeeTitle.MANAGER)
+                .title(Title.MANAGER)
                 .salary(85000.0)
                 .build();
 
@@ -269,7 +268,7 @@ class EmployeeControllerIntegrationTest {
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         assertEquals("Isaac", model.getFirstName());
@@ -277,7 +276,7 @@ class EmployeeControllerIntegrationTest {
         assertEquals(LocalDate.of(2000, 1, 1), model.getDob());
         assertEquals("IsaacWallace@me.com", model.getEmail());
         assertEquals(1000.00, model.getSalary());
-        assertEquals(EmployeeTitle.ADMINISTRATOR, model.getTitle());
+        assertEquals(Title.ADMINISTRATOR, model.getTitle());
     }
 
     @Test
@@ -289,7 +288,7 @@ class EmployeeControllerIntegrationTest {
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         model.setFirstName("Test");
@@ -297,14 +296,14 @@ class EmployeeControllerIntegrationTest {
         model.setDob(LocalDate.of(2001, 1, 1));
         model.setEmail("Different");
         model.setSalary(2000.00);
-        model.setTitle(EmployeeTitle.MANAGER);
+        model.setTitle(Title.MANAGER);
 
         assertEquals("Test", model.getFirstName());
         assertEquals("Boob", model.getLastName());
         assertEquals(LocalDate.of(2001, 1, 1), model.getDob());
         assertEquals("Different", model.getEmail());
         assertEquals(2000.00, model.getSalary());
-        assertEquals(EmployeeTitle.MANAGER, model.getTitle());
+        assertEquals(Title.MANAGER, model.getTitle());
     }
 
     @Test
@@ -316,7 +315,7 @@ class EmployeeControllerIntegrationTest {
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         EmployeeResponseModel model2 = EmployeeResponseModel.builder()
@@ -326,7 +325,7 @@ class EmployeeControllerIntegrationTest {
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         assertEquals(model1, model2);
@@ -342,7 +341,7 @@ class EmployeeControllerIntegrationTest {
                 .dob(LocalDate.of(2000, 1, 1))
                 .email("IsaacWallace@me.com")
                 .salary(1000.00)
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         assertTrue(model.toString().contains("Isaac"));
@@ -414,7 +413,7 @@ class EmployeeControllerIntegrationTest {
             .email("IsaacWallace@me.com")
             .salary(1000.00)
             .dob(LocalDate.of(2000, 1, 1))
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.post()
@@ -433,7 +432,7 @@ class EmployeeControllerIntegrationTest {
             .email("IsaacWallace@me.com")
             .salary(1000.00)
             .dob(LocalDate.of(2000, 1, 1))
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.put()
@@ -484,7 +483,7 @@ class EmployeeControllerIntegrationTest {
                 .email("JohnDoe@me.com")
                 .salary(1000.00)
                 .dob(LocalDate.of(2000, 1, 1))
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         this.webTestClient.post()
@@ -505,7 +504,7 @@ class EmployeeControllerIntegrationTest {
                 .email("JohnDoe@me.com")
                 .salary(1000.00)
                 .dob(LocalDate.of(2000, 1, 1))
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         this.webTestClient.post()
@@ -526,7 +525,7 @@ class EmployeeControllerIntegrationTest {
                 .email(null)
                 .salary(1000.00)
                 .dob(LocalDate.of(2000, 1, 1))
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         this.webTestClient.post()
@@ -547,7 +546,7 @@ class EmployeeControllerIntegrationTest {
                 .email("JohnDoe@me.com")
                 .salary(null)
                 .dob(LocalDate.of(2000, 1, 1))
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         this.webTestClient.post()
@@ -568,7 +567,7 @@ class EmployeeControllerIntegrationTest {
                 .email("JohnDoe@me.com")
                 .salary(1000.00)
                 .dob(null)
-                .title(EmployeeTitle.ADMINISTRATOR)
+                .title(Title.ADMINISTRATOR)
                 .build();
 
         this.webTestClient.post()
@@ -604,7 +603,7 @@ class EmployeeControllerIntegrationTest {
 
     @Test
     void whenEmployeeFirstNameAndLastNameAlreadyExistOnPost_thenReturnConflict() {
-        Employee newEmployee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee newEmployee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         this.employeeRepository.save(newEmployee);
 
@@ -614,7 +613,7 @@ class EmployeeControllerIntegrationTest {
             .email("TestMail@me.com")
             .salary(1000.00)
             .dob(LocalDate.of(2000, 1, 1))
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.post()
@@ -629,7 +628,7 @@ class EmployeeControllerIntegrationTest {
 
     @Test
     void whenEmployeeEmailAlreadyExistsOnPost_thenReturnConflict() {
-        Employee newEmployee = new Employee("Johnny", "Test", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee newEmployee = new Employee("Johnny", "Test", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         this.employeeRepository.save(newEmployee);
 
@@ -639,7 +638,7 @@ class EmployeeControllerIntegrationTest {
             .email("JohnDoe@me.com")
             .salary(1000.00)
             .dob(LocalDate.of(2000, 1, 1))
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.post()
@@ -662,7 +661,7 @@ class EmployeeControllerIntegrationTest {
             .email("JohnDoe@me.com")
             .salary(1000.00)
             .dob(LocalDate.of(2000, 1, 1))
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.put()
@@ -683,7 +682,7 @@ class EmployeeControllerIntegrationTest {
             .email("JohnDoe@me.com")
             .salary(1000.00)
             .dob(LocalDate.of(2000, 1, 1))
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.put()
@@ -704,7 +703,7 @@ class EmployeeControllerIntegrationTest {
             .email("JohnDoe@me.com")
             .salary(1000.00)
             .dob(LocalDate.of(2000, 1, 1))
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.put()
@@ -725,7 +724,7 @@ class EmployeeControllerIntegrationTest {
             .email("JohnDoe@me.com")
             .salary(1000.00)
             .dob(LocalDate.of(2000, 1, 1))
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.put()
@@ -746,7 +745,7 @@ class EmployeeControllerIntegrationTest {
             .email(null)
             .salary(1000.00)
             .dob(LocalDate.of(2000, 1, 1))
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.put()
@@ -767,7 +766,7 @@ class EmployeeControllerIntegrationTest {
             .email("JohnDoe@me.com")
             .salary(1000.00)
             .dob(null)
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.put()
@@ -788,7 +787,7 @@ class EmployeeControllerIntegrationTest {
             .email("JohnDoe@me.com")
             .salary(null)
             .dob(LocalDate.of(2000, 1, 1))
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.put()
@@ -824,7 +823,7 @@ class EmployeeControllerIntegrationTest {
 
     @Test
     void whenEmployeeFirstNameAndLastNameAlreadyExistOnPut_thenReturnConflict() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         this.employeeRepository.save(employee);
 
@@ -834,7 +833,7 @@ class EmployeeControllerIntegrationTest {
             .email("JohnnyTest@me.com")
             .salary(1000.00)
             .dob(LocalDate.of(2000, 1, 1))
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.put()
@@ -849,7 +848,7 @@ class EmployeeControllerIntegrationTest {
 
     @Test
     void whenEmployeeEmailAlreadyExistsOnPut_thenReturnConflict() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         this.employeeRepository.save(employee);
 
@@ -859,7 +858,7 @@ class EmployeeControllerIntegrationTest {
             .email("JohnDoe@me.com")
             .salary(1000.00)
             .dob(LocalDate.of(2000, 1, 1))
-            .title(EmployeeTitle.ADMINISTRATOR)
+            .title(Title.ADMINISTRATOR)
             .build();
 
         this.webTestClient.put()

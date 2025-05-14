@@ -3,7 +3,7 @@ package com.isaacwallace.employee_service.Business;
 import com.isaacwallace.employee_service.DataAccess.Employee;
 import com.isaacwallace.employee_service.DataAccess.EmployeeIdentifier;
 import com.isaacwallace.employee_service.DataAccess.EmployeeRepository;
-import com.isaacwallace.employee_service.DataAccess.EmployeeTitle;
+import com.isaacwallace.employee_service.DataAccess.Title;
 import com.isaacwallace.employee_service.Mapper.EmployeeRequestMapper;
 import com.isaacwallace.employee_service.Mapper.EmployeeResponseMapper;
 import com.isaacwallace.employee_service.Presentation.Models.EmployeeRequestModel;
@@ -12,7 +12,6 @@ import com.isaacwallace.employee_service.Utils.Exceptions.DuplicateResourceExcep
 import com.isaacwallace.employee_service.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.employee_service.Utils.Exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         try {
-            EmployeeTitle.valueOf(model.getTitle().toString());
+            Title.valueOf(model.getTitle().toString());
         } catch (Exception e) {
             throw new InvalidInputException("Invalid title: " + model.getTitle());
         }

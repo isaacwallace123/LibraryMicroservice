@@ -1,5 +1,6 @@
 package com.isaacwallace.api_gateway.Inventory.Presentation.Models;
 
+import com.isaacwallace.api_gateway.Author.Presentation.Models.AuthorResponseModel;
 import com.isaacwallace.api_gateway.Inventory.DataAccess.Availability;
 import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
@@ -20,4 +21,6 @@ public class InventoryResponseModel extends RepresentationModel<InventoryRespons
     private Integer stock;
 
     private Availability availability;
+
+    private AuthorResponseModel author;
 }

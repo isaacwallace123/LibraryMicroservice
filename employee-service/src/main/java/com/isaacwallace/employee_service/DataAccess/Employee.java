@@ -27,11 +27,11 @@ public class Employee {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    private EmployeeTitle title;
+    private Title title;
 
     private Double salary;
 
-    public Employee(@NotNull String firstName, @NotNull String lastName, @NotNull LocalDate dob, @NotNull String email, @NotNull EmployeeTitle title, @NotNull Double salary) {
+    public Employee(@NotNull String firstName, @NotNull String lastName, @NotNull LocalDate dob, @NotNull String email, @NotNull Title title, @NotNull Double salary) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;

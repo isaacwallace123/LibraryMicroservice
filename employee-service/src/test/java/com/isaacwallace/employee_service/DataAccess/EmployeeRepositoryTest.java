@@ -23,19 +23,19 @@ class EmployeeRepositoryTest {
 
     @Test
     void testEmployeeConstructorAndGetters() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         assertEquals("John", employee.getFirstName());
         assertEquals("Doe", employee.getLastName());
         assertEquals(LocalDate.of(2000, 1, 1), employee.getDob());
         assertEquals("JohnDoe@me.com", employee.getEmail());
-        assertEquals(EmployeeTitle.ADMINISTRATOR, employee.getTitle());
+        assertEquals(Title.ADMINISTRATOR, employee.getTitle());
         assertEquals(1000.00, employee.getSalary());
     }
 
     @Test
     void testSaveEmployee() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         employeeRepository.save(employee);
 
         assertEquals(1, employeeRepository.count());
@@ -43,7 +43,7 @@ class EmployeeRepositoryTest {
 
     @Test
     void toStringContainsAllFields() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         employee.setId(1);
         employee.setEmployeeIdentifier(new EmployeeIdentifier());
 
@@ -53,13 +53,13 @@ class EmployeeRepositoryTest {
         assertEquals("Doe", employee.getLastName());
         assertEquals(LocalDate.of(2000, 1, 1), employee.getDob());
         assertEquals("JohnDoe@me.com", employee.getEmail());
-        assertEquals(EmployeeTitle.ADMINISTRATOR, employee.getTitle());
+        assertEquals(Title.ADMINISTRATOR, employee.getTitle());
         assertEquals(1000.00, employee.getSalary());
     }
 
     @Test
     void testEqualsSameObject() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         employee.setId(1);
         employee.setEmployeeIdentifier(new EmployeeIdentifier());
 
@@ -68,25 +68,25 @@ class EmployeeRepositoryTest {
 
     @Test
     void testEqualsDifferentClass() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         assertNotEquals(employee, "NotEmployee");
     }
 
     @Test
     void testEquals_Null() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         assertNotEquals(employee, null);
     }
 
     @Test
     void testNotEqualsDifferentFields() {
-        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         e1.setEmployeeIdentifier(new EmployeeIdentifier("abc-123"));
         e1.setId(1);
 
-        Employee e2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee e2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         e2.setEmployeeIdentifier(new EmployeeIdentifier("xyz-456"));
         e1.setId(2);
 
@@ -96,7 +96,7 @@ class EmployeeRepositoryTest {
 
     @Test
     void testEqualsNullAndDifferentClass() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         employee.setEmployeeIdentifier(new EmployeeIdentifier("abc-123"));
         employee.setId(1);
@@ -107,8 +107,8 @@ class EmployeeRepositoryTest {
 
     @Test
     void testEquals_DifferentId() {
-        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         e1.setEmployeeIdentifier(new EmployeeIdentifier("123"));
         e2.setEmployeeIdentifier(new EmployeeIdentifier("456"));
@@ -118,14 +118,14 @@ class EmployeeRepositoryTest {
 
     @Test
     void testHashCode_DifferentObjects() {
-        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee e2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee e2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         assertNotEquals(e1.hashCode(), e2.hashCode());
     }
 
     @Test
     void testHashCodeConsistency() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         employee.setEmployeeIdentifier(new EmployeeIdentifier("abc-123"));
         employee.setId(1);
 
@@ -140,8 +140,8 @@ class EmployeeRepositoryTest {
 
     @Test
     public void whenEmployeesExists_thenReturnAllEmployees() {
-        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         this.employeeRepository.save(employee1);
         this.employeeRepository.save(employee2);
@@ -155,63 +155,63 @@ class EmployeeRepositoryTest {
 
     @Test
     void testEquals_DifferentFirstName() {
-        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         assertNotEquals(employee1, employee2);
     }
 
     @Test
     void testEquals_DifferentLastName() {
-        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee employee2 = new Employee("Jane", "Test", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee employee2 = new Employee("Jane", "Test", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         assertNotEquals(employee1, employee2);
     }
 
     @Test
     void testEquals_DifferentDob() {
-        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(1999, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(1999, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         assertNotEquals(employee1, employee2);
     }
 
     @Test
     void testEquals_DifferentEmail() {
-        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JaneDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JaneDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         assertNotEquals(employee1, employee2);
     }
 
     @Test
     void testEquals_DifferentTitle() {
-        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.MANAGER, 1000.00);
+        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.MANAGER, 1000.00);
         assertNotEquals(employee1, employee2);
     }
 
     @Test
     void testEquals_DifferentSalary() {
-        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 2000.00);
+        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 2000.00);
         assertNotEquals(employee1, employee2);
     }
 
     @Test
     void testEquals_DifferentIdentifier() {
-        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         assertNotEquals(employee1, employee2);
     }
 
     @Test
     void testEquals_MixedNullFields() {
-        Employee employee1 = new Employee("John", null, LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee1 = new Employee("John", null, LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee employee2 = new Employee("Jane", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         assertNotEquals(employee1, employee2);
     }
 
     @Test
     public void whenEmployeeExists_thenReturnEmployeeByEmployeeId() {
-        Employee employee = new Employee("John", null, LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", null, LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         employee.setEmployeeIdentifier(new EmployeeIdentifier());
 
@@ -239,7 +239,7 @@ class EmployeeRepositoryTest {
 
     @Test
     void whenValidEntitySaved_thenPersistentAndReturn() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         employee.setEmployeeIdentifier(new EmployeeIdentifier());
 
         Employee savedEmployee = this.employeeRepository.save(employee);
@@ -257,7 +257,7 @@ class EmployeeRepositoryTest {
 
     @Test
     void whenValidEntityDeleted_thenPersistentAndReturn() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         employee.setEmployeeIdentifier(new EmployeeIdentifier());
 
         this.employeeRepository.save(employee);
@@ -268,7 +268,7 @@ class EmployeeRepositoryTest {
 
     @Test
     void testExistsByFirstNameAndLastNameIgnoreCase() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         employee.setEmployeeIdentifier(new EmployeeIdentifier());
 
         this.employeeRepository.save(employee);
@@ -279,7 +279,7 @@ class EmployeeRepositoryTest {
 
     @Test
     void testExistsByEmailIgnoreCase() {
-        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
         employee.setEmployeeIdentifier(new EmployeeIdentifier());
 
         this.employeeRepository.save(employee);
@@ -290,8 +290,8 @@ class EmployeeRepositoryTest {
 
     @Test
     void testSavingDuplicateEmployees() {
-        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee employee2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee employee2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         employee1.setEmployeeIdentifier(new EmployeeIdentifier());
         employee2.setEmployeeIdentifier(new EmployeeIdentifier());
@@ -305,8 +305,8 @@ class EmployeeRepositoryTest {
 
     @Test
     void testDeleteAllEmployees() {
-        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee employee2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee employee1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee employee2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         employee1.setEmployeeIdentifier(new EmployeeIdentifier());
         employee2.setEmployeeIdentifier(new EmployeeIdentifier());
@@ -362,8 +362,8 @@ class EmployeeRepositoryTest {
     void testEqualsIdenticalValuesDifferentInstances() {
         EmployeeIdentifier id = new EmployeeIdentifier("same-id");
 
-        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         e1.setId(1);
         e2.setId(1);
@@ -375,8 +375,8 @@ class EmployeeRepositoryTest {
 
     @Test
     void testEqualsDifferentEmployeeIdentifier() {
-        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
+        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "JohnDoe@me.com", Title.ADMINISTRATOR, 1000.00);
 
         e1.setId(1);
         e2.setId(1);
@@ -390,8 +390,8 @@ class EmployeeRepositoryTest {
     void testHashCodeConsistencyForSameState() {
         EmployeeIdentifier identifier = new EmployeeIdentifier("abc");
 
-        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "email@example.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "email@example.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee e1 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "email@example.com", Title.ADMINISTRATOR, 1000.00);
+        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "email@example.com", Title.ADMINISTRATOR, 1000.00);
 
         e1.setId(1);
         e2.setId(1);
@@ -414,8 +414,8 @@ class EmployeeRepositoryTest {
 
     @Test
     void testEqualsWithOneNullField() {
-        Employee e1 = new Employee("John", null, LocalDate.of(2000, 1, 1), "email@example.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
-        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "email@example.com", EmployeeTitle.ADMINISTRATOR, 1000.00);
+        Employee e1 = new Employee("John", null, LocalDate.of(2000, 1, 1), "email@example.com", Title.ADMINISTRATOR, 1000.00);
+        Employee e2 = new Employee("John", "Doe", LocalDate.of(2000, 1, 1), "email@example.com", Title.ADMINISTRATOR, 1000.00);
 
         assertNotEquals(e1, e2);
     }

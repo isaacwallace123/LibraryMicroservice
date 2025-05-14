@@ -1,6 +1,6 @@
 package com.isaacwallace.employee_service.Presentation.Models;
 
-import com.isaacwallace.employee_service.DataAccess.EmployeeTitle;
+import com.isaacwallace.employee_service.DataAccess.Title;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,6 +16,6 @@ public class EmployeeRequestModel {
     LocalDate dob;
 
     String email;
-    EmployeeTitle title;
+    Title title;
     Double salary;
 }

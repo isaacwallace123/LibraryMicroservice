@@ -19,7 +19,7 @@ skinparam rectangle {
 }
 rectangle "Library Management" as BoundedContextSocialMedia #line.dashed {
     package "Membership Sub-Domain" #FFCDD2 {
-        ENTITY(Member) #lightblue {
+        AGGREGATE_ROOT(Member) #lightblue {
             memberId: UUID
             firstname: String
             lastname: String
@@ -71,7 +71,7 @@ rectangle "Library Management" as BoundedContextSocialMedia #line.dashed {
     }
 
     package "Transaction Sub-Domain" #Wheat {
-        AGGREGATE_ROOT(Transaction) #lightblue {
+        AGGREGATE(Transaction) #lightblue {
             transactionId: UUID
             memberId: UUID
             bookId: UUID

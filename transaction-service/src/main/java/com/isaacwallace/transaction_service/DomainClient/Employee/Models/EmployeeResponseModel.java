@@ -1,6 +1,5 @@
-package com.isaacwallace.employee_service.Presentation.Models;
+package com.isaacwallace.transaction_service.DomainClient.Employee.Models;
 
-import com.isaacwallace.employee_service.DataAccess.Title;
 import lombok.Builder;
 import lombok.Data;
 

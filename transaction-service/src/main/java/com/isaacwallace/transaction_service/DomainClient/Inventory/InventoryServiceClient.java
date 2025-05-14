@@ -1,11 +1,11 @@
-package com.isaacwallace.inventory_service.DomainClient;
+package com.isaacwallace.transaction_service.DomainClient.Inventory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.isaacwallace.inventory_service.DomainClient.Models.AuthorResponseModel;
-import com.isaacwallace.inventory_service.Utils.Exceptions.DuplicateResourceException;
-import com.isaacwallace.inventory_service.Utils.Exceptions.HttpErrorInfo;
-import com.isaacwallace.inventory_service.Utils.Exceptions.InvalidInputException;
-import com.isaacwallace.inventory_service.Utils.Exceptions.NotFoundException;
+import com.isaacwallace.transaction_service.DomainClient.Inventory.Models.BookResponseModel;
+import com.isaacwallace.transaction_service.Utils.Exceptions.DuplicateResourceException;
+import com.isaacwallace.transaction_service.Utils.Exceptions.HttpErrorInfo;
+import com.isaacwallace.transaction_service.Utils.Exceptions.InvalidInputException;
+import com.isaacwallace.transaction_service.Utils.Exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,22 +17,22 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public class AuthorServiceClient {
+public class InventoryServiceClient {
     private final RestTemplate restTemplate;
     private final ObjectMapper mapper;
 
     private String SERVICE_BASE_URL;
 
-    public AuthorServiceClient(RestTemplate restTemplate, ObjectMapper mapper, @Value("${app.author-service.host}") String SERVICE_HOST, @Value("${app.author-service.port}") String SERVICE_PORT) {
+    public InventoryServiceClient(RestTemplate restTemplate, ObjectMapper mapper, @Value("${app.inventory-service.host}") String SERVICE_HOST, @Value("${app.inventory-service.port}") String SERVICE_PORT) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
 
-        this.SERVICE_BASE_URL = "http://" + SERVICE_HOST + ":" + SERVICE_PORT + "/api/v1/authors";
+        this.SERVICE_BASE_URL = "http://" + SERVICE_HOST + ":" + SERVICE_PORT + "/api/v1/inventory";
     }
 
-    public AuthorResponseModel getAuthorById(String authorid) {
+    public BookResponseModel getInventoryById(String bookid) {
         try {
-            return restTemplate.getForObject(SERVICE_BASE_URL + "/" + authorid, AuthorResponseModel.class);
+            return restTemplate.getForObject(SERVICE_BASE_URL + "/" + bookid, BookResponseModel.class);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
