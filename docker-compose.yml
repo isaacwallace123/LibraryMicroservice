@@ -179,6 +179,7 @@ services:
       - membership-service
       - employee-service
       - inventory-service
+      - transaction-service
     privileged: true
 
   # SERVICES

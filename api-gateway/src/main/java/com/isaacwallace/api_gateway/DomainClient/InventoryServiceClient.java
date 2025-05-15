@@ -1,8 +1,8 @@
 package com.isaacwallace.api_gateway.DomainClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.isaacwallace.api_gateway.Inventory.Presentation.Models.InventoryRequestModel;
-import com.isaacwallace.api_gateway.Inventory.Presentation.Models.InventoryResponseModel;
+import com.isaacwallace.api_gateway.Services.Inventory.Presentation.Models.InventoryRequestModel;
+import com.isaacwallace.api_gateway.Services.Inventory.Presentation.Models.InventoryResponseModel;
 import com.isaacwallace.api_gateway.Utils.Exceptions.DuplicateResourceException;
 import com.isaacwallace.api_gateway.Utils.Exceptions.HttpErrorInfo;
 import com.isaacwallace.api_gateway.Utils.Exceptions.InvalidInputException;

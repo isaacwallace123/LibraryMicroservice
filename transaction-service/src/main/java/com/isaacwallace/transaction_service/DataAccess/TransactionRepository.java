@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface TransactionRepository extends MongoRepository<Transaction,String> {
     Transaction findTransactionByTransactionIdentifier_Transactionid(String transactionid);
-    List<Transaction> findTransactionsByBookid(String bookid);
+    List<Transaction> findTransactionsByMemberid(String memberid);
+
+    Transaction findTransactionByMemberidAndTransactionIdentifier_Transactionid(String memberid, String transactionid);
 }

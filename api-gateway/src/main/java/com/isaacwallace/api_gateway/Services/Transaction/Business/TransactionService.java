@@ -1,7 +1,7 @@
-package com.isaacwallace.transaction_service.Business;
+package com.isaacwallace.api_gateway.Services.Transaction.Business;
 
-import com.isaacwallace.transaction_service.Presentation.Models.TransactionRequestModel;
-import com.isaacwallace.transaction_service.Presentation.Models.TransactionResponseModel;
+import com.isaacwallace.api_gateway.Services.Transaction.Presentation.Models.TransactionRequestModel;
+import com.isaacwallace.api_gateway.Services.Transaction.Presentation.Models.TransactionResponseModel;
 
 import java.util.List;
 

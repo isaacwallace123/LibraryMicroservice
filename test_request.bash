@@ -1,46 +1,80 @@
 #!/bin/bash
 
-BASE_URL="http://localhost:8080/api/v1"
+API_URLS=(
+  "http://localhost:8080/api/v1/members"
+  "http://localhost:8080/api/v1/authors"
+  "http://localhost:8080/api/v1/employees"
+  "http://localhost:8080/api/v1/transactions"
+  "http://localhost:8080/api/v1/inventory"
+)
 
-declare -A SAMPLE_DATA
-SAMPLE_DATA["members"]='{"name":"John Doe","email":"john@example.com"}'
-SAMPLE_DATA["authors"]='{"name":"Jane Austen","genre":"Fiction"}'
-SAMPLE_DATA["employees"]='{"name":"Alice Smith","position":"Manager"}'
+get_id_key_from_url() {
+  local url="$1"
+  local endpoint=$(basename "$url")
 
-declare -A SAMPLE_IDS
-SAMPLE_IDS["members"]="123e4567-e89b-12d3-a456-556642440000"
-SAMPLE_IDS["authors"]="123e4567-e89b-12d3-a456-556642440000"
-SAMPLE_IDS["employees"]="6a8aeaec-cff9-4ace-a8f0-146f8ed180e5"
+  if [[ "$endpoint" == "inventory" ]]; then
+    echo "bookid"
+    return
+  fi
 
-for resource in members authors employees; do
-    echo "=== Testing $resource ==="
+  if [[ "$endpoint" == *s ]]; then
+    echo "${endpoint%s}id"
+  else
+    echo "${endpoint}id"
+  fi
+}
 
-    # POST
-    echo "--- POST $resource ---"
-    curl -s -X POST "$BASE_URL/$resource" \
-        -H "Content-Type: application/json" \
-        -d "${SAMPLE_DATA[$resource]}"
-    echo -e "\n"
+print_response() {
+  local STATUS=$1
+  local BODY=$2
+  echo "Status Code: $STATUS"
+  echo "Response Body: $BODY"
+  echo "--------------------------------------"
+}
 
-    # PUT
-    echo "--- PUT $resource/${SAMPLE_IDS[$resource]} ---"
-    curl -s -X PUT "$BASE_URL/$resource/${SAMPLE_IDS[$resource]}" \
-        -H "Content-Type: application/json" \
-        -d "${SAMPLE_DATA[$resource]}"
-    echo -e "\n"
+for BASE_URL in "${API_URLS[@]}"; do
+  echo "Testing $BASE_URL"
+  echo "----------------------------------------------"
 
-    # GET by ID
-    echo "--- GET $resource/${SAMPLE_IDS[$resource]} ---"
-    curl -s -X GET "$BASE_URL/$resource/${SAMPLE_IDS[$resource]}"
-    echo -e "\n"
+  echo "GET ALL:"
+  RESPONSE=$(curl -s -w "\n%{http_code}" "$BASE_URL")
+  BODY=$(echo "$RESPONSE" | head -n -1)
+  STATUS=$(echo "$RESPONSE" | tail -n 1)
+  print_response "$STATUS" "$BODY"
 
-    # DELETE
-    echo "--- DELETE $resource/${SAMPLE_IDS[$resource]} ---"
-    curl -s -X DELETE "$BASE_URL/$resource/${SAMPLE_IDS[$resource]}"
-    echo -e "\n"
+  ID_KEY=$(get_id_key_from_url "$BASE_URL")
+  ID=$(echo "$BODY" | jq -r ".[0].${ID_KEY}")
+  echo "$ID_KEY"
+  if [[ "$ID" == "null" || -z "$ID" ]]; then
+      echo "No ID found in response. Skipping GetById/Put/Delete tests."
+      echo "--------------------------------"
+      continue
+  fi
 
-    # GET all
-    echo "--- GET $resource (all) ---"
-    curl -s -X GET "$BASE_URL/$resource"
-    echo -e "\n\n"
+  # GET BY ID
+  echo "GET BY ID: $ID"
+  RESPONSE=$(curl -s -w "\n%{http_code}" "$BASE_URL/$ID")
+  BODY=$(echo "$RESPONSE" | head -n -1)
+  STATUS=$(echo "$RESPONSE" | tail -n1)
+  print_response "$STATUS" "$BODY"
+
+  # POST
+  echo "POST (create new resource):"
+
+  # Extract first item safely
+  FIRST_ITEM=$(echo "$BODY" | jq ".[0]")
+
+  if [[ -z "$FIRST_ITEM" || "$FIRST_ITEM" == "null" ]]; then
+    echo "No valid item found to use for POST. Skipping."
+    continue
+  fi
+
+  POST_PAYLOAD=$(echo "$FIRST_ITEM" | jq "del(.${ID_KEY}) | walk(if type == \"object\" then del(.links?) else . end)")
+
+  echo "POST Payload: $POST_PAYLOAD"
+
+  RESPONSE=$(curl -s -w "\n%{http_code}" -H "Content-Type: application/json" -d "$POST_PAYLOAD" "$BASE_URL")
+  BODY=$(echo "$RESPONSE" | head -n -1)
+  STATUS=$(echo "$RESPONSE" | tail -n1)
+  print_response "$STATUS" "$BODY"
 done

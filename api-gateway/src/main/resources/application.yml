@@ -36,3 +36,6 @@ app:
   inventory-service:
     host: inventory-service
     port: 8080
+  transaction-service:
+    host: transaction-service
+    port: 8080

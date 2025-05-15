@@ -14,7 +14,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DataLoaderService {
-
     private final TransactionRepository repository;
     private final ObjectMapper objectMapper;
 

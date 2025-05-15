@@ -1,8 +1,6 @@
 package com.isaacwallace.transaction_service.Business;
 
-import com.isaacwallace.transaction_service.DataAccess.Transaction;
-import com.isaacwallace.transaction_service.DataAccess.TransactionIdentifier;
-import com.isaacwallace.transaction_service.DataAccess.TransactionRepository;
+import com.isaacwallace.transaction_service.DataAccess.*;
 import com.isaacwallace.transaction_service.DomainClient.Employee.EmployeeServiceClient;
 import com.isaacwallace.transaction_service.DomainClient.Employee.Models.EmployeeResponseModel;
 import com.isaacwallace.transaction_service.DomainClient.Inventory.InventoryServiceClient;
@@ -41,7 +39,7 @@ public class TransactionServiceImpl implements TransactionService {
         this.employeeServiceClient = employeeServiceClient;
     }
 
-    private void validateBookInvariant(Transaction transaction) {
+    private void validateInvariant(Transaction transaction) {
         if (transaction.getBookid() == null) {
             throw new InvalidInputException("Transaction must be associated with a book.");
         }
@@ -54,8 +52,38 @@ public class TransactionServiceImpl implements TransactionService {
             throw new InvalidInputException("Transaction must be associated with an employee.");
         }
 
-        if (transaction.getPayment().getAmount() <= 0) {
+        if (transaction.getPayment() == null) {
+            throw new InvalidInputException("Transaction must have a payment.");
+        }
+
+        if (transaction.getPayment().getAmount() == null) {
+            throw new InvalidInputException("Transaction must have an amount.");
+        }
+
+        if  (transaction.getPayment().getAmount() <= 0) {
             throw new InvalidInputException("Transaction must have a positive amount.");
+        }
+
+        if (transaction.getPayment().getCurrency() == null) {
+            throw new InvalidInputException("Transaction must have a currency.");
+        }
+
+        try {
+            Currency.valueOf(transaction.getPayment().getCurrency().toString());
+        } catch (Exception e) {
+            throw new InvalidInputException("Invalid title: " + transaction.getPayment().getCurrency().toString());
+        }
+
+        try {
+            Method.valueOf(transaction.getPayment().getMethod().toString());
+        } catch (Exception e) {
+            throw new InvalidInputException("Invalid title: " + transaction.getPayment().getMethod().toString());
+        }
+
+        try {
+            Status.valueOf(transaction.getStatus().toString());
+        } catch (Exception e) {
+            throw new InvalidInputException("Invalid title: " + transaction.getStatus().toString());
         }
     }
 
@@ -80,7 +108,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         Transaction transaction = this.transactionRequestMapper.requestModelToEntity(transactionRequestModel, new TransactionIdentifier());
 
-        this.validateBookInvariant(transaction);
+        this.validateInvariant(transaction);
 
         return this.transactionResponseMapper.entityToResponseModel(this.transactionRepository.save(transaction), inventoryServiceClient, membershipServiceClient, employeeServiceClient);
     }
@@ -100,7 +128,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         Transaction updatedTransaction = this.transactionRepository.save(transaction);
 
-        this.validateBookInvariant(transaction);
+        this.validateInvariant(transaction);
 
         return this.transactionResponseMapper.entityToResponseModel(updatedTransaction, inventoryServiceClient, membershipServiceClient, employeeServiceClient);
     }
@@ -113,5 +141,23 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         this.transactionRepository.delete(transaction);
+    }
+
+    // Aggregate Root Methods
+
+    public List<TransactionResponseModel> getTransactionsByMemberId(String memberid) {
+        this.membershipServiceClient.getMemberById(memberid);
+
+        return this.transactionResponseMapper.entitiesToResponseModelList(this.transactionRepository.findTransactionsByMemberid(memberid), inventoryServiceClient, membershipServiceClient, employeeServiceClient);
+    }
+
+    public TransactionResponseModel getMemberTransactionByTransactionId(String memberid, String transactionid) {
+        Transaction transaction = this.transactionRepository.findTransactionByMemberidAndTransactionIdentifier_Transactionid(memberid, transactionid);
+
+        if (transaction == null) {
+            throw new NotFoundException("Unknown transaction id " + transactionid);
+        }
+
+        return this.transactionResponseMapper.entityToResponseModel(transaction, inventoryServiceClient, membershipServiceClient, employeeServiceClient);
     }
 }

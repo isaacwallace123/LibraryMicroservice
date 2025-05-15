@@ -12,7 +12,6 @@ import com.isaacwallace.membership_service.Utils.Exceptions.DuplicateResourceExc
 import com.isaacwallace.membership_service.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.membership_service.Utils.Exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

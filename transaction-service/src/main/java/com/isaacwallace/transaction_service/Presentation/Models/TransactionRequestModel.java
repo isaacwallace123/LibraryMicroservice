@@ -6,10 +6,10 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Value
+@Data
 @Builder
-@Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 public class TransactionRequestModel {
     String memberid;
     String bookid;
