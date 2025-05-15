@@ -42,7 +42,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     private AuthorResponseModel addLinks(AuthorResponseModel authorResponseModel) {
         Link selfLink = linkTo(methodOn(AuthorController.class)
-                .getAuthorById(authorResponseModel.getAuthorId()))
+                .getAuthorById(authorResponseModel.getAuthorid()))
                 .withSelfRel();
         authorResponseModel.add(selfLink);
 

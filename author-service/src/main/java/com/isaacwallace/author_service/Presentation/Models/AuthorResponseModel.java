@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class AuthorResponseModel {
-    private String authorId;
+    private String authorid;
 
     private String firstName;
     private String lastName;

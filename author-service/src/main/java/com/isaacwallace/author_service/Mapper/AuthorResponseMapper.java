@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AuthorResponseMapper {
-    @Mapping(expression = "java(author.getAuthorIdentifier().getAuthorid())", target = "authorId")
+    @Mapping(expression = "java(author.getAuthorIdentifier().getAuthorid())", target = "authorid")
     AuthorResponseModel entityToResponseModel(Author author);
     List<AuthorResponseModel> entityToResponseModelList(List<Author> authors);
 }
