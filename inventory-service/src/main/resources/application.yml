@@ -18,6 +18,9 @@ app:
   author-service:
     host: author-service
     port: 8080
+  transaction-service:
+    host: transaction-service
+    port: 8080
 
 ---
 # For test

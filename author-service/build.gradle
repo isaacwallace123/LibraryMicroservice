@@ -70,7 +70,6 @@ jacocoTestReport {
 	}
 }
 
-
 jacocoTestCoverageVerification {
 	violationRules {
 		rule {

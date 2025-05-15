@@ -1,6 +1,7 @@
 package com.isaacwallace.inventory_service.Presentation;
 
 import com.isaacwallace.inventory_service.Business.BookService;
+import com.isaacwallace.inventory_service.DataAccess.Book;
 import com.isaacwallace.inventory_service.Presentation.Models.BookRequestModel;
 import com.isaacwallace.inventory_service.Presentation.Models.BookResponseModel;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,13 @@ public class BookController {
     @DeleteMapping(value = "{bookid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BookResponseModel> DeleteBook(@PathVariable String bookid) {
         this.bookService.deleteBook(bookid);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping("/author/{authorid}")
+    public ResponseEntity<Void> deleteBooksByAuthor(@PathVariable String authorid) {
+        this.bookService.deleteBooksByAuthor(authorid);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

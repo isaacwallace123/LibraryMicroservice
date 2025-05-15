@@ -1,12 +1,14 @@
 package com.isaacwallace.inventory_service.Presentation.Models;
 
 import com.isaacwallace.inventory_service.DataAccess.Availability;
-import com.isaacwallace.inventory_service.DomainClient.Models.AuthorResponseModel;
+import com.isaacwallace.inventory_service.DomainClient.Author.Models.AuthorResponseModel;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class BookResponseModel {
     private String bookid;
     private String authorid;

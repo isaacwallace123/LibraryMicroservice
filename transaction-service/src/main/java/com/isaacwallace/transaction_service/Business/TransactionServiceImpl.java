@@ -15,8 +15,10 @@ import com.isaacwallace.transaction_service.Utils.Exceptions.InvalidInputExcepti
 import com.isaacwallace.transaction_service.Utils.Exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -87,16 +89,28 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
+    private Transaction getTransactionObjectById(String transactionid) {
+        try {
+            UUID.fromString(transactionid);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidInputException("Invalid transactionid: " + transactionid);
+        }
+
+        Transaction transaction = this.transactionRepository.findTransactionByTransactionIdentifier_Transactionid(transactionid);
+
+        if (transaction == null) {
+            throw new NotFoundException("Unknown transactionid: " + transactionid);
+        }
+
+        return transaction;
+    }
+
     public List<TransactionResponseModel> getAllTransactions() {
         return this.transactionResponseMapper.entitiesToResponseModelList(transactionRepository.findAll(), inventoryServiceClient, membershipServiceClient, employeeServiceClient);
     }
 
     public TransactionResponseModel getTransactionById(String transactionid) {
-        Transaction transaction = this.transactionRepository.findTransactionByTransactionIdentifier_Transactionid(transactionid);
-
-        if (transaction == null) {
-            throw new NotFoundException("Unknown transaction id " + transactionid);
-        }
+        Transaction transaction = this.getTransactionObjectById(transactionid);
 
         return this.transactionResponseMapper.entityToResponseModel(transaction, inventoryServiceClient, membershipServiceClient, employeeServiceClient);
     }
@@ -118,11 +132,7 @@ public class TransactionServiceImpl implements TransactionService {
         this.membershipServiceClient.getMemberById(transactionRequestModel.getMemberid());
         this.employeeServiceClient.getEmployeeById(transactionRequestModel.getEmployeeid());
 
-        Transaction transaction = this.transactionRepository.findTransactionByTransactionIdentifier_Transactionid(transactionid);
-
-        if (transaction == null) {
-            throw new NotFoundException("Unknown transaction id " + transactionid);
-        }
+        Transaction transaction = this.getTransactionObjectById(transactionid);
 
         this.transactionRequestMapper.updateEntityFromRequest(transactionRequestModel, transaction);
 
@@ -134,11 +144,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     public void deleteTransaction(String transactionid) {
-        Transaction transaction = this.transactionRepository.findTransactionByTransactionIdentifier_Transactionid(transactionid);
-
-        if (transaction == null) {
-            throw new NotFoundException("Unknown transaction id " + transactionid);
-        }
+        Transaction transaction = this.getTransactionObjectById(transactionid);
 
         this.transactionRepository.delete(transaction);
     }
@@ -159,5 +165,29 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         return this.transactionResponseMapper.entityToResponseModel(transaction, inventoryServiceClient, membershipServiceClient, employeeServiceClient);
+    }
+
+    public void deleteTransactionsByInventory(@PathVariable String bookid) {
+        this.inventoryServiceClient.getInventoryById(bookid);
+
+        List<Transaction> transactions = this.transactionRepository.findTransactionsByBookid(bookid);
+
+        this.transactionRepository.deleteAll(transactions);
+    }
+
+    public void deleteTransactionsByEmployee(@PathVariable String employeeid) {
+        this.employeeServiceClient.getEmployeeById(employeeid);
+
+        List<Transaction> transactions = this.transactionRepository.findTransactionsByEmployeeid(employeeid);
+
+        this.transactionRepository.deleteAll(transactions);
+    }
+
+    public void deleteTransactionsByMember(@PathVariable String memberid) {
+        this.membershipServiceClient.getMemberById(memberid);
+
+        List<Transaction> transactions = this.transactionRepository.findTransactionsByMemberid(memberid);
+
+        this.transactionRepository.deleteAll(transactions);
     }
 }

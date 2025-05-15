@@ -45,4 +45,25 @@ public class TransactionController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @DeleteMapping("/inventory/{bookid}")
+    public ResponseEntity<Void> deleteTransactionsByInventory(@PathVariable String bookid) {
+        this.transactionService.deleteTransactionsByInventory(bookid);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping("/employee/{employeeid}")
+    public ResponseEntity<Void> deleteTransactionsByEmployee(@PathVariable String employeeid) {
+        this.transactionService.deleteTransactionsByEmployee(employeeid);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping("/member/{memberid}")
+    public ResponseEntity<Void> deleteTransactionsByMember(@PathVariable String memberid) {
+        this.transactionService.deleteTransactionsByMember(memberid);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

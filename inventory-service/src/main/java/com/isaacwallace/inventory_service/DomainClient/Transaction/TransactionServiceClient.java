@@ -1,7 +1,6 @@
-package com.isaacwallace.inventory_service.DomainClient;
+package com.isaacwallace.inventory_service.DomainClient.Transaction;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.isaacwallace.inventory_service.DomainClient.Models.AuthorResponseModel;
 import com.isaacwallace.inventory_service.Utils.Exceptions.DuplicateResourceException;
 import com.isaacwallace.inventory_service.Utils.Exceptions.HttpErrorInfo;
 import com.isaacwallace.inventory_service.Utils.Exceptions.InvalidInputException;
@@ -14,25 +13,26 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @Component
-public class AuthorServiceClient {
+public class TransactionServiceClient {
     private final RestTemplate restTemplate;
     private final ObjectMapper mapper;
 
     private String SERVICE_BASE_URL;
 
-    public AuthorServiceClient(RestTemplate restTemplate, ObjectMapper mapper, @Value("${app.author-service.host}") String SERVICE_HOST, @Value("${app.author-service.port}") String SERVICE_PORT) {
+    public TransactionServiceClient(RestTemplate restTemplate, ObjectMapper mapper, @Value("${app.transaction-service.host}") String SERVICE_HOST, @Value("${app.transaction-service.port}") String SERVICE_PORT) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
 
-        this.SERVICE_BASE_URL = "http://" + SERVICE_HOST + ":" + SERVICE_PORT + "/api/v1/authors";
+        this.SERVICE_BASE_URL = "http://" + SERVICE_HOST + ":" + SERVICE_PORT + "/api/v1/transactions";
     }
 
-    public AuthorResponseModel getAuthorById(String authorid) {
+    public void deleteTransactionByInventoryId(String inventoryid) {
         try {
-            return restTemplate.getForObject(SERVICE_BASE_URL + "/" + authorid, AuthorResponseModel.class);
+            this.restTemplate.delete(SERVICE_BASE_URL + "/inventory/" + inventoryid);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }

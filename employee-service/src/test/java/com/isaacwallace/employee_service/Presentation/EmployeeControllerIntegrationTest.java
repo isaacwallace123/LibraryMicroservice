@@ -3,20 +3,25 @@ package com.isaacwallace.employee_service.Presentation;
 import com.isaacwallace.employee_service.DataAccess.Employee;
 import com.isaacwallace.employee_service.DataAccess.EmployeeRepository;
 import com.isaacwallace.employee_service.DataAccess.Title;
+import com.isaacwallace.employee_service.DomainClient.TransactionServiceClient;
 import com.isaacwallace.employee_service.Presentation.Models.EmployeeRequestModel;
 import com.isaacwallace.employee_service.Presentation.Models.EmployeeResponseModel;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql({"/data.sql"})
@@ -28,11 +33,19 @@ class EmployeeControllerIntegrationTest {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @MockitoBean
+    private TransactionServiceClient transactionServiceClient;
+
     private final String SERVICE_URI = "/api/v1/employees";
 
     private final String NOT_FOUND_ID = "00000000-0000-0000-0000-000000000000";
     private final String INVALID_ID = "00000000-0000-0000-0000-0000000000000";
     private final String VALID_ID = "6a8aeaec-cff9-4ace-a8f0-146f8ed180e5";
+
+    @BeforeEach
+    void setup() {
+        doNothing().when(transactionServiceClient).deleteTransactionByEmployeeId(anyString());
+    }
 
     /*--> Header Tests <--*/
 

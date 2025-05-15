@@ -3,6 +3,7 @@ package com.isaacwallace.author_service.Business;
 import com.isaacwallace.author_service.DataAccess.Author;
 import com.isaacwallace.author_service.DataAccess.AuthorIdentifier;
 import com.isaacwallace.author_service.DataAccess.AuthorRepository;
+import com.isaacwallace.author_service.DomainClient.InventoryServiceClient;
 import com.isaacwallace.author_service.Mapper.AuthorRequestMapper;
 import com.isaacwallace.author_service.Mapper.AuthorResponseMapper;
 import com.isaacwallace.author_service.Presentation.Models.AuthorRequestModel;
@@ -21,10 +22,14 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorResponseMapper authorResponseMapper;
     private final AuthorRequestMapper authorRequestMapper;
 
-    public AuthorServiceImpl(AuthorRepository authorRepository, AuthorResponseMapper authorResponseMapper, AuthorRequestMapper authorRequestMapper) {
+    private final InventoryServiceClient inventoryServiceClient;
+
+    public AuthorServiceImpl(AuthorRepository authorRepository, AuthorResponseMapper authorResponseMapper, AuthorRequestMapper authorRequestMapper, InventoryServiceClient inventoryServiceClient) {
         this.authorRepository = authorRepository;
         this.authorResponseMapper = authorResponseMapper;
         this.authorRequestMapper = authorRequestMapper;
+
+        this.inventoryServiceClient = inventoryServiceClient;
     }
 
     private void validateAuthorRequestModel(AuthorRequestModel model) {
@@ -92,6 +97,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     public void deleteAuthor(String authorid) {
         Author author = this.getAuthorObjectById(authorid);
+
+        inventoryServiceClient.deleteInventoryByAuthorId(authorid);
 
         this.authorRepository.delete(author);
     }

@@ -4,6 +4,7 @@ import com.isaacwallace.employee_service.DataAccess.Employee;
 import com.isaacwallace.employee_service.DataAccess.EmployeeIdentifier;
 import com.isaacwallace.employee_service.DataAccess.EmployeeRepository;
 import com.isaacwallace.employee_service.DataAccess.Title;
+import com.isaacwallace.employee_service.DomainClient.TransactionServiceClient;
 import com.isaacwallace.employee_service.Mapper.EmployeeRequestMapper;
 import com.isaacwallace.employee_service.Mapper.EmployeeResponseMapper;
 import com.isaacwallace.employee_service.Presentation.Models.EmployeeRequestModel;
@@ -24,10 +25,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeResponseMapper employeeResponseMapper;
     private final EmployeeRequestMapper employeeRequestMapper;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeResponseMapper employeeResponseMapper, EmployeeRequestMapper employeeRequestMapper) {
+    private final TransactionServiceClient transactionServiceClient;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeResponseMapper employeeResponseMapper, EmployeeRequestMapper employeeRequestMapper, TransactionServiceClient transactionServiceClient) {
         this.employeeRepository = employeeRepository;
         this.employeeResponseMapper = employeeResponseMapper;
         this.employeeRequestMapper = employeeRequestMapper;
+
+        this.transactionServiceClient = transactionServiceClient;
     }
 
     private void validateEmployeeRequestModel(EmployeeRequestModel model) {
@@ -111,6 +116,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     public void deleteEmployee(String employeeid) {
         Employee employee = this.getEmployeeObjectById(employeeid);
+
+        this.transactionServiceClient.deleteTransactionByEmployeeId(employeeid);
 
         this.employeeRepository.delete(employee);
     }

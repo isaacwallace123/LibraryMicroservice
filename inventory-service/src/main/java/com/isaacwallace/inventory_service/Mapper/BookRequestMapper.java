@@ -11,8 +11,10 @@ import org.mapstruct.MappingTarget;
 public interface BookRequestMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "bookIdentifier", source = "bookIdentifier")
     Book requestModelToEntity(BookRequestModel bookRequestModel, BookIdentifier bookIdentifier);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "bookIdentifier", ignore = true)
     void updateEntityFromRequest(BookRequestModel bookRequestModel, @MappingTarget Book book);
 }

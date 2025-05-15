@@ -1,18 +1,34 @@
 package com.isaacwallace.author_service.Presentation;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isaacwallace.author_service.DataAccess.AuthorRepository;
+import com.isaacwallace.author_service.DomainClient.InventoryServiceClient;
 import com.isaacwallace.author_service.Presentation.Models.AuthorRequestModel;
 import com.isaacwallace.author_service.Presentation.Models.AuthorResponseModel;
+import com.isaacwallace.author_service.Utils.Exceptions.HttpErrorInfo;
+import com.isaacwallace.author_service.Utils.Exceptions.InvalidInputException;
+import com.isaacwallace.author_service.Utils.Exceptions.NotFoundException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+
+import java.nio.charset.StandardCharsets;
+import java.time.ZonedDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql({"/data.sql"})
@@ -24,11 +40,19 @@ class AuthorControllerIntegrationTest {
     @Autowired
     private AuthorRepository authorRepository;
 
+    @MockitoBean
+    private InventoryServiceClient inventoryServiceClient;
+
     private final String SERVICE_URI = "/api/v1/authors";
 
     private final String NOT_FOUND_ID = "00000000-0000-0000-0000-000000000000";
     private final String INVALID_ID = "00000000-0000-0000-0000-0000000000000";
     private final String VALID_ID = "123e4567-e89b-12d3-a456-556642440000";
+
+    @BeforeEach
+    void setup() {
+        doNothing().when(inventoryServiceClient).deleteInventoryByAuthorId(anyString());
+    }
 
     /*--> Header Tests <--*/
 
@@ -213,7 +237,7 @@ class AuthorControllerIntegrationTest {
 
                 list.forEach((authorResponseModel) -> {
                     assertNotNull(authorResponseModel);
-                    assertNotNull(authorResponseModel.getAuthorId());
+                    assertNotNull(authorResponseModel.getAuthorid());
                     assertNotNull(authorResponseModel.getFirstName());
                     assertNotNull(authorResponseModel.getLastName());
                 });
@@ -230,11 +254,11 @@ class AuthorControllerIntegrationTest {
             .expectBody(AuthorResponseModel.class)
             .value((authorResponseModel) -> {
                 assertNotNull(authorResponseModel);
-                assertNotNull(authorResponseModel.getAuthorId());
+                assertNotNull(authorResponseModel.getAuthorid());
                 assertNotNull(authorResponseModel.getFirstName());
                 assertNotNull(authorResponseModel.getLastName());
 
-                assertEquals(VALID_ID, authorResponseModel.getAuthorId());
+                assertEquals(VALID_ID, authorResponseModel.getAuthorid());
             });
     }
 
@@ -256,7 +280,7 @@ class AuthorControllerIntegrationTest {
             .expectBody(AuthorResponseModel.class)
             .value((authorResponseModel) -> {
                 assertNotNull(authorResponseModel);
-                assertNotNull(authorResponseModel.getAuthorId());
+                assertNotNull(authorResponseModel.getAuthorid());
                 assertNotNull(authorResponseModel.getFirstName());
                 assertNotNull(authorResponseModel.getLastName());
 
@@ -284,7 +308,7 @@ class AuthorControllerIntegrationTest {
             .expectBody(AuthorResponseModel.class)
             .value((authorResponseModel) -> {
                 assertNotNull(authorResponseModel);
-                assertNotNull(authorResponseModel.getAuthorId());
+                assertNotNull(authorResponseModel.getAuthorid());
                 assertNotNull(authorResponseModel.getFirstName());
                 assertNotNull(authorResponseModel.getLastName());
 
@@ -292,7 +316,7 @@ class AuthorControllerIntegrationTest {
                 assertEquals(authorRequestModel.getLastName(), authorResponseModel.getLastName());
                 assertEquals(authorRequestModel.getPseudonym(), authorResponseModel.getPseudonym());
 
-                assertEquals(VALID_ID, authorResponseModel.getAuthorId());
+                assertEquals(VALID_ID, authorResponseModel.getAuthorid());
             });
     }
 
@@ -591,13 +615,13 @@ class AuthorControllerIntegrationTest {
     @Test
     void testAuthorResponseModelBuilderAndGetters() {
         AuthorResponseModel response = AuthorResponseModel.builder()
-                .authorId("123")
+                .authorid("123")
                 .firstName("Isaac")
                 .lastName("Wallace")
                 .pseudonym("I.W.")
                 .build();
 
-        assertEquals("123", response.getAuthorId());
+        assertEquals("123", response.getAuthorid());
         assertEquals("Isaac", response.getFirstName());
         assertEquals("Wallace", response.getLastName());
         assertEquals("I.W.", response.getPseudonym());
@@ -607,7 +631,7 @@ class AuthorControllerIntegrationTest {
         assertTrue(toString.contains("123"));
 
         AuthorResponseModel other = AuthorResponseModel.builder()
-                .authorId("123")
+                .authorid("123")
                 .firstName("Isaac")
                 .lastName("Wallace")
                 .pseudonym("I.W.")

@@ -1,4 +1,4 @@
-package com.isaacwallace.inventory_service.DomainClient.Models;
+package com.isaacwallace.inventory_service.DomainClient.Author.Models;
 
 import lombok.Builder;
 import lombok.Data;

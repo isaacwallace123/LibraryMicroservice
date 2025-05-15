@@ -14,6 +14,11 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
+app:
+  inventory-service:
+    host: inventory-service
+    port: 8080
+
 ---
 # For test
 

@@ -1,6 +1,7 @@
 package com.isaacwallace.inventory_service.DataAccess;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "book")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +31,13 @@ public class Book {
     private LocalDateTime released;
 
     private Integer stock;
+
+    public Book(String authorid, String title, String genre, String publisher, LocalDateTime now, int stock) {
+        this.authorid = authorid;
+        this.title = title;
+        this.genre = genre;
+        this.publisher = publisher;
+        this.released = now;
+        this.stock = stock;
+    }
 }

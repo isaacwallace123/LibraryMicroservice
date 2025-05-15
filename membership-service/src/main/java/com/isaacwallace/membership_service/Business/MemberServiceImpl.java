@@ -4,6 +4,7 @@ import com.isaacwallace.membership_service.DataAccess.Member;
 import com.isaacwallace.membership_service.DataAccess.MemberIdentifier;
 import com.isaacwallace.membership_service.DataAccess.MemberRepository;
 import com.isaacwallace.membership_service.DataAccess.PhoneType;
+import com.isaacwallace.membership_service.DomainClient.TransactionServiceClient;
 import com.isaacwallace.membership_service.Mapper.MemberRequestMapper;
 import com.isaacwallace.membership_service.Mapper.MemberResponseMapper;
 import com.isaacwallace.membership_service.Presentation.Models.MemberRequestModel;
@@ -24,10 +25,14 @@ public class MemberServiceImpl implements MemberService {
     private final MemberResponseMapper memberResponseMapper;
     private final MemberRequestMapper memberRequestMapper;
 
-    public MemberServiceImpl(MemberRepository memberRepository, MemberResponseMapper memberResponseMapper, MemberRequestMapper memberRequestMapper) {
+    private final TransactionServiceClient transactionServiceClient;
+
+    public MemberServiceImpl(MemberRepository memberRepository, MemberResponseMapper memberResponseMapper, MemberRequestMapper memberRequestMapper, TransactionServiceClient transactionServiceClient) {
         this.memberRepository = memberRepository;
         this.memberResponseMapper = memberResponseMapper;
         this.memberRequestMapper = memberRequestMapper;
+
+        this.transactionServiceClient = transactionServiceClient;
     }
 
     private void validateMemberRequestModel(MemberRequestModel model) {
@@ -129,6 +134,8 @@ public class MemberServiceImpl implements MemberService {
 
     public void deleteMember(String memberid) {
         Member member = this.getMemberObjectById(memberid);
+
+        this.transactionServiceClient.deleteTransactionByMemberId(memberid);
 
         this.memberRepository.delete(member);
     }

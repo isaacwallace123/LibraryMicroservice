@@ -1,18 +1,23 @@
 package com.isaacwallace.membership_service.Presentation;
 
 import com.isaacwallace.membership_service.DataAccess.*;
+import com.isaacwallace.membership_service.DomainClient.TransactionServiceClient;
 import com.isaacwallace.membership_service.Presentation.Models.MemberRequestModel;
 import com.isaacwallace.membership_service.Presentation.Models.MemberResponseModel;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql({"/data-psql.sql"})
@@ -24,11 +29,19 @@ class MemberControllerIntegrationTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @MockitoBean
+    private TransactionServiceClient transactionServiceClient;
+
     private final String SERVICE_URI = "/api/v1/members";
 
     private final String NOT_FOUND_ID = "00000000-0000-0000-0000-000000000000";
     private final String INVALID_ID = "00000000-0000-0000-0000-0000000000000";
     private final String VALID_ID = "123e4567-e89b-12d3-a456-556642440000";
+
+    @BeforeEach
+    void setup() {
+        doNothing().when(transactionServiceClient).deleteTransactionByMemberId(anyString());
+    }
 
     /*--> Header Tests <--*/
 
