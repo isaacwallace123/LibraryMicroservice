@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.isaacwallace.transaction_service.DomainClient.Inventory.InventoryServiceClient;
 import com.isaacwallace.transaction_service.DomainClient.Inventory.Models.BookResponseModel;
+import com.isaacwallace.transaction_service.Utils.Exceptions.DuplicateResourceException;
 import com.isaacwallace.transaction_service.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.transaction_service.Utils.Exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -162,5 +163,13 @@ public class InventoryServiceClientTest {
                 .andRespond(withStatus(HttpStatus.UNPROCESSABLE_ENTITY));
 
         assertThrows(InvalidInputException.class, () -> client.getInventoryById(INVALID_ID));
+    }
+
+    @Test
+    void whenConflictOccurs_thenThrowDuplicateResourceException() {
+        server.expect(requestTo(BASE_URL + "/" + VALID_INVENTORY_ID))
+                .andRespond(withStatus(HttpStatus.CONFLICT));
+
+        assertThrows(DuplicateResourceException.class, () -> client.getInventoryById(VALID_INVENTORY_ID));
     }
 }

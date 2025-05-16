@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.isaacwallace.transaction_service.DomainClient.Employee.EmployeeServiceClient;
 import com.isaacwallace.transaction_service.DomainClient.Employee.Models.EmployeeResponseModel;
 import com.isaacwallace.transaction_service.DomainClient.Employee.Models.Title;
+import com.isaacwallace.transaction_service.Utils.Exceptions.DuplicateResourceException;
 import com.isaacwallace.transaction_service.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.transaction_service.Utils.Exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -137,5 +138,13 @@ public class EmployeeServiceClientTest {
                 .andRespond(withStatus(HttpStatus.UNPROCESSABLE_ENTITY));
 
         assertThrows(InvalidInputException.class, () -> client.getEmployeeById(INVALID_ID));
+    }
+
+    @Test
+    void whenConflictOccurs_thenThrowDuplicateResourceException() {
+        server.expect(requestTo(BASE_URL + "/" + VALID_EMPLOYEE_ID))
+                .andRespond(withStatus(HttpStatus.CONFLICT));
+
+        assertThrows(DuplicateResourceException.class, () -> client.getEmployeeById(VALID_EMPLOYEE_ID));
     }
 }

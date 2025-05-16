@@ -558,6 +558,17 @@ public class TransactionControllerIntegrationTest {
     }
 
     @Test
+    void whenGetMemberTransactionById_thenReturnTransaction() {
+        this.webTestClient.get()
+                .uri(SERVICE_URI + "/" + VALID_TRANSACTION_ID, VALID_MEMBER_ID)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBodyList(TransactionResponseModel.class)
+                .hasSize(1);
+    }
+
+    @Test
     void whenTransactionExistsOnCreate_thenReturnIsCreated() {
         TransactionRequestModel transactionRequestModel = TransactionRequestModel.builder()
                 .memberid(VALID_MEMBER_ID)
@@ -620,9 +631,48 @@ public class TransactionControllerIntegrationTest {
     }
 
     @Test
+    void whenMemberTransactionExistsOnUpdate_thenReturnIsOk() {
+        TransactionRequestModel transactionRequestModel = TransactionRequestModel.builder()
+                .memberid(VALID_MEMBER_ID)
+                .bookid(VALID_INVENTORY_ID)
+                .employeeid(VALID_EMPLOYEE_ID)
+                .status(Status.PENDING)
+                .payment(new Payment(Method.CASH, Currency.CAD, 9.99))
+                .transactionDate(LocalDateTime.now())
+                .build();
+
+        this.webTestClient.put()
+                .uri(SERVICE_URI + "/" + VALID_TRANSACTION_ID, VALID_MEMBER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(transactionRequestModel)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(TransactionResponseModel.class)
+                .value((transactionResponseModel) -> {
+                    assertNotNull(transactionResponseModel);
+                    assertNotNull(transactionResponseModel.getTransactionid());
+                    assertNotNull(transactionResponseModel.getMemberid());
+                    assertNotNull(transactionResponseModel.getBookid());
+                    assertNotNull(transactionResponseModel.getEmployeeid());
+                    assertNotNull(transactionResponseModel.getStatus());
+                    assertNotNull(transactionResponseModel.getPayment());
+                    assertNotNull(transactionResponseModel.getTransactionDate());
+                });
+    }
+
+    @Test
     void whenTransactionExistsOnDelete_thenReturnIsNoContent() {
         this.webTestClient.delete()
                 .uri(BASE_URI + "/" + VALID_TRANSACTION_ID)
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+
+    @Test
+    void whenMemberTransactionExistsOnDelete_thenReturnIsNoContent() {
+        this.webTestClient.delete()
+                .uri(SERVICE_URI + "/" + VALID_TRANSACTION_ID, VALID_MEMBER_ID)
                 .exchange()
                 .expectStatus().isNoContent();
     }
@@ -674,4 +724,83 @@ public class TransactionControllerIntegrationTest {
                 .expectBody()
                 .jsonPath("$.message").isEqualTo("Invalid transactionid: " + INVALID_ID);
     }
+
+    @Test
+    void whenDeleteTransactionsByInventory_thenAllMatchingTransactionsAreDeleted() {
+        this.transactionRepository.deleteAll();
+
+        for (int i = 0; i < 3; i++) {
+            Transaction transaction = new Transaction();
+            transaction.setTransactionIdentifier(new TransactionIdentifier());
+            transaction.setBookid(VALID_INVENTORY_ID);
+            transaction.setMemberid(VALID_MEMBER_ID);
+            transaction.setEmployeeid(VALID_EMPLOYEE_ID);
+            transaction.setPayment(new Payment(Method.CASH, Currency.CAD, 9.99));
+            transaction.setTransactionDate(LocalDateTime.now());
+            transaction.setStatus(Status.COMPLETED);
+            transactionRepository.save(transaction);
+        }
+
+        assertEquals(3, transactionRepository.count());
+
+        this.webTestClient.delete()
+                .uri(BASE_URI + "/inventory/{bookid}", VALID_INVENTORY_ID)
+                .exchange()
+                .expectStatus().isNoContent();
+
+        assertEquals(0, transactionRepository.count());
+    }
+
+    @Test
+    void whenDeleteTransactionsByEmployee_thenAllMatchingTransactionsAreDeleted() {
+        this.transactionRepository.deleteAll();
+
+        for (int i = 0; i < 2; i++) {
+            Transaction transaction = new Transaction();
+            transaction.setTransactionIdentifier(new TransactionIdentifier());
+            transaction.setBookid(VALID_INVENTORY_ID);
+            transaction.setMemberid(VALID_MEMBER_ID);
+            transaction.setEmployeeid(VALID_EMPLOYEE_ID);
+            transaction.setPayment(new Payment(Method.CASH, Currency.CAD, 10.00));
+            transaction.setTransactionDate(LocalDateTime.now());
+            transaction.setStatus(Status.PENDING);
+            transactionRepository.save(transaction);
+        }
+
+        assertEquals(2, transactionRepository.count());
+
+        this.webTestClient.delete()
+                .uri(BASE_URI + "/employee/{employeeid}", VALID_EMPLOYEE_ID)
+                .exchange()
+                .expectStatus().isNoContent();
+
+        assertEquals(0, transactionRepository.count());
+    }
+
+    @Test
+    void whenDeleteTransactionsByMember_thenAllMatchingTransactionsAreDeleted() {
+        this.transactionRepository.deleteAll();
+
+        for (int i = 0; i < 4; i++) {
+            Transaction transaction = new Transaction();
+            transaction.setTransactionIdentifier(new TransactionIdentifier());
+            transaction.setBookid(VALID_INVENTORY_ID);
+            transaction.setMemberid(VALID_MEMBER_ID);
+            transaction.setEmployeeid(VALID_EMPLOYEE_ID);
+            transaction.setPayment(new Payment(Method.CASH, Currency.CAD, 12.34));
+            transaction.setTransactionDate(LocalDateTime.now());
+            transaction.setStatus(Status.COMPLETED);
+            transactionRepository.save(transaction);
+        }
+
+        assertEquals(4, transactionRepository.count());
+
+        this.webTestClient.delete()
+                .uri(BASE_URI + "/member/{memberid}", VALID_MEMBER_ID)
+                .exchange()
+                .expectStatus().isNoContent();
+
+        assertEquals(0, transactionRepository.count());
+    }
+
 }

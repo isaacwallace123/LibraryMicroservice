@@ -2,12 +2,14 @@ package com.isaacwallace.api_gateway.Services.Inventory.Presentation.Models;
 
 import com.isaacwallace.api_gateway.Services.Author.Presentation.Models.AuthorResponseModel;
 import com.isaacwallace.api_gateway.Services.Inventory.DataAccess.Availability;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class InventoryResponseModel extends RepresentationModel<InventoryResponseModel> {
     private String bookid;
     private String authorid;

@@ -7,6 +7,7 @@ import com.isaacwallace.transaction_service.DomainClient.Membership.Models.Addre
 import com.isaacwallace.transaction_service.DomainClient.Membership.Models.MemberResponseModel;
 import com.isaacwallace.transaction_service.DomainClient.Membership.Models.Phone;
 import com.isaacwallace.transaction_service.DomainClient.Membership.Models.PhoneType;
+import com.isaacwallace.transaction_service.Utils.Exceptions.DuplicateResourceException;
 import com.isaacwallace.transaction_service.Utils.Exceptions.InvalidInputException;
 import com.isaacwallace.transaction_service.Utils.Exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -159,5 +160,13 @@ public class MembershipServiceClientTest {
                 .andRespond(withStatus(HttpStatus.UNPROCESSABLE_ENTITY));
 
         assertThrows(InvalidInputException.class, () -> client.getMemberById(INVALID_ID));
+    }
+
+    @Test
+    void whenConflictOccurs_thenThrowDuplicateResourceException() {
+        server.expect(requestTo(BASE_URL + "/" + VALID_MEMBER_ID))
+                .andRespond(withStatus(HttpStatus.CONFLICT));
+
+        assertThrows(DuplicateResourceException.class, () -> client.getMemberById(VALID_MEMBER_ID));
     }
 }

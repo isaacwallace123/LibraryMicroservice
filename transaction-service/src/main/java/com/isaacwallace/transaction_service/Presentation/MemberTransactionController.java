@@ -30,21 +30,21 @@ public class MemberTransactionController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TransactionResponseModel> addMember(@PathVariable String memberid, @RequestBody TransactionRequestModel transactionRequestModel) {
+    public ResponseEntity<TransactionResponseModel> addTransaction(@PathVariable String memberid, @RequestBody TransactionRequestModel transactionRequestModel) {
         transactionRequestModel.setMemberid(memberid);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(this.transactionService.addTransaction(transactionRequestModel));
     }
 
     @PutMapping(value = "{transactionid}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TransactionResponseModel> EditCustomer(@PathVariable String memberid, @PathVariable String transactionid, @RequestBody TransactionRequestModel transactionRequestModel) {
+    public ResponseEntity<TransactionResponseModel> EditTransaction(@PathVariable String memberid, @PathVariable String transactionid, @RequestBody TransactionRequestModel transactionRequestModel) {
         transactionRequestModel.setMemberid(memberid);
 
         return ResponseEntity.status(HttpStatus.OK).body(this.transactionService.updateTransaction(transactionid, transactionRequestModel));
     }
 
     @DeleteMapping(value = "{transactionid}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TransactionResponseModel> DeleteCustomer(@PathVariable String transactionid) {
+    public ResponseEntity<TransactionResponseModel> DeleteTransaction(@PathVariable String transactionid) {
         this.transactionService.deleteTransaction(transactionid);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

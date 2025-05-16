@@ -112,6 +112,13 @@ rectangle "Library Management" as BoundedContextSocialMedia #line.dashed {
             CANCELED
         }
 
+        note right of Transaction
+          Invariant:
+          - Payment amount must be > 0
+          - Must reference a valid Book, Member, and Employee
+          - Status must begin as PENDING
+        end note
+
         Transaction "1" o--> "1" TransactionIdentifier
         Transaction --> TransactionDate
         Transaction --> TransactionStatus
@@ -140,6 +147,13 @@ rectangle "Library Management" as BoundedContextSocialMedia #line.dashed {
         VALUE_OBJECT(BookIdentifier) #Bisque {
             isbn: UUID
         }
+
+        note right of Book
+          Invariant:
+          - Stock >= 0
+          - Must have valid authorId
+        end note
+
 
         Book "1" o--> "1" BookIdentifier
         Book "1" o--> "1" MemberIdentifier
@@ -178,6 +192,8 @@ rectangle "Library Management" as BoundedContextSocialMedia #line.dashed {
     Transaction "1" o--> "1" EmployeeIdentifier
     Transaction "1" o--> "1" BookIdentifier
     Transaction "1" o--> "1" MemberIdentifier
+
+    Member --> Transaction
 }
 
 @enduml

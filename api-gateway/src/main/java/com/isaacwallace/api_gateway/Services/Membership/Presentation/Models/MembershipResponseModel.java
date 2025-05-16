@@ -2,10 +2,12 @@ package com.isaacwallace.api_gateway.Services.Membership.Presentation.Models;
 
 import com.isaacwallace.api_gateway.Services.Membership.DataAccess.Address;
 import com.isaacwallace.api_gateway.Services.Membership.DataAccess.Phone;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
 
 @Data
+@Builder
 public class MembershipResponseModel extends RepresentationModel<MembershipResponseModel> {
     private String memberid;
 

@@ -5,12 +5,14 @@ import com.isaacwallace.api_gateway.Services.Inventory.Presentation.Models.Inven
 import com.isaacwallace.api_gateway.Services.Membership.Presentation.Models.MembershipResponseModel;
 import com.isaacwallace.api_gateway.Services.Transaction.DataAccess.Payment;
 import com.isaacwallace.api_gateway.Services.Transaction.DataAccess.Status;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class TransactionResponseModel extends RepresentationModel<TransactionResponseModel> {
     private String transactionid;
 
