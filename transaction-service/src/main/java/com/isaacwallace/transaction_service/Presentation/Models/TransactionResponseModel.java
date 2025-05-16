@@ -5,11 +5,13 @@ import com.isaacwallace.transaction_service.DataAccess.Status;
 import com.isaacwallace.transaction_service.DomainClient.Employee.Models.EmployeeResponseModel;
 import com.isaacwallace.transaction_service.DomainClient.Inventory.Models.BookResponseModel;
 import com.isaacwallace.transaction_service.DomainClient.Membership.Models.MemberResponseModel;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class TransactionResponseModel {
     private String transactionid;
 

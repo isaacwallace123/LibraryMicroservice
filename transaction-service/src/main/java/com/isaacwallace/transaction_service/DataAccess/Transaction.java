@@ -30,4 +30,13 @@ public class Transaction {
     private Status status;
 
     private Payment payment;
+
+    public Transaction(String memberid, String bookid, String employeeid, LocalDateTime now, Status status, Payment payment) {
+        this.memberid = memberid;
+        this.bookid = bookid;
+        this.employeeid = employeeid;
+        this.transactionDate = now;
+        this.status = status;
+        this.payment = payment;
+    }
 }

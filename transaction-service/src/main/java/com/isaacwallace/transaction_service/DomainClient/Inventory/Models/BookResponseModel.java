@@ -1,10 +1,12 @@
 package com.isaacwallace.transaction_service.DomainClient.Inventory.Models;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class BookResponseModel {
     private String bookid;
     private String authorid;

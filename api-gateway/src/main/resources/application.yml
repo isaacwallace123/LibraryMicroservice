@@ -13,16 +13,6 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
----
-
-spring:
-  application:
-    name: api-gateway
-
-  config:
-    activate:
-      on-profile: docker
-
 app:
   author-service:
     host: author-service
@@ -39,3 +29,23 @@ app:
   transaction-service:
     host: transaction-service
     port: 8080
+
+---
+
+spring:
+  application:
+    name: api-gateway
+
+  config:
+    activate:
+      on-profile: docker
+
+---
+
+spring:
+  application:
+    name: api-gateway
+
+  config:
+    activate:
+      on-profile: test

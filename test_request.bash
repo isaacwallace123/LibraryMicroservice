@@ -135,7 +135,7 @@ read -r answer
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
   echo "▶ Running integration tests..."
-  ./run_integration_tests.bash
+  ./test_units.bash
 else
   echo "🛑 Skipping integration tests."
 fi

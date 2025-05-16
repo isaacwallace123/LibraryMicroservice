@@ -19,17 +19,17 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping("")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TransactionResponseModel>> getAllTransactions() {
         return ResponseEntity.status(HttpStatus.OK).body(this.transactionService.getAllTransactions());
     }
 
-    @GetMapping("{transactionid}")
+    @GetMapping(value = "{transactionid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TransactionResponseModel> getTransactionById(@PathVariable String transactionid) {
         return ResponseEntity.status(HttpStatus.OK).body(this.transactionService.getTransactionById(transactionid));
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TransactionResponseModel> addMember(@RequestBody TransactionRequestModel transactionRequestModel) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.transactionService.addTransaction(transactionRequestModel));
     }
@@ -39,28 +39,28 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(this.transactionService.updateTransaction(transactionid, transactionRequestModel));
     }
 
-    @DeleteMapping("{transactionid}")
+    @DeleteMapping(value = "{transactionid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TransactionResponseModel> DeleteCustomer(@PathVariable String transactionid) {
         this.transactionService.deleteTransaction(transactionid);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @DeleteMapping("/inventory/{bookid}")
+    @DeleteMapping(value = "/inventory/{bookid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteTransactionsByInventory(@PathVariable String bookid) {
         this.transactionService.deleteTransactionsByInventory(bookid);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @DeleteMapping("/employee/{employeeid}")
+    @DeleteMapping(value = "/employee/{employeeid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteTransactionsByEmployee(@PathVariable String employeeid) {
         this.transactionService.deleteTransactionsByEmployee(employeeid);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @DeleteMapping("/member/{memberid}")
+    @DeleteMapping(value = "/member/{memberid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteTransactionsByMember(@PathVariable String memberid) {
         this.transactionService.deleteTransactionsByMember(memberid);
 

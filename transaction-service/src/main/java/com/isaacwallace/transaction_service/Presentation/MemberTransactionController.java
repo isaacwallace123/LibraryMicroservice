@@ -19,17 +19,17 @@ public class MemberTransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping("")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TransactionResponseModel>> getAllTransactions(@PathVariable String memberid) {
         return ResponseEntity.status(HttpStatus.OK).body(this.transactionService.getTransactionsByMemberId(memberid));
     }
 
-    @GetMapping("{transactionid}")
+    @GetMapping(value = "{transactionid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TransactionResponseModel> getTransactionById(@PathVariable String memberid, @PathVariable String transactionid) {
         return ResponseEntity.status(HttpStatus.OK).body(this.transactionService.getMemberTransactionByTransactionId(memberid, transactionid));
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TransactionResponseModel> addMember(@PathVariable String memberid, @RequestBody TransactionRequestModel transactionRequestModel) {
         transactionRequestModel.setMemberid(memberid);
 
@@ -43,7 +43,7 @@ public class MemberTransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(this.transactionService.updateTransaction(transactionid, transactionRequestModel));
     }
 
-    @DeleteMapping("{transactionid}")
+    @DeleteMapping(value = "{transactionid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TransactionResponseModel> DeleteCustomer(@PathVariable String transactionid) {
         this.transactionService.deleteTransaction(transactionid);
 
