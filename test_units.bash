@@ -10,6 +10,7 @@ MICROSERVICES=(
   "./membership-service"
   "./author-service"
   "./employee-service"
+  "./api-gateway"
 )
 
 echo -e "${GREEN}🚀 Starting build and test for all microservices...${NC}"
