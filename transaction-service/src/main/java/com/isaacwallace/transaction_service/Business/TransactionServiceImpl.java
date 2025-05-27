@@ -2,11 +2,8 @@ package com.isaacwallace.transaction_service.Business;
 
 import com.isaacwallace.transaction_service.DataAccess.*;
 import com.isaacwallace.transaction_service.DomainClient.Employee.EmployeeServiceClient;
-import com.isaacwallace.transaction_service.DomainClient.Employee.Models.EmployeeResponseModel;
 import com.isaacwallace.transaction_service.DomainClient.Inventory.InventoryServiceClient;
-import com.isaacwallace.transaction_service.DomainClient.Inventory.Models.BookResponseModel;
 import com.isaacwallace.transaction_service.DomainClient.Membership.MembershipServiceClient;
-import com.isaacwallace.transaction_service.DomainClient.Membership.Models.MemberResponseModel;
 import com.isaacwallace.transaction_service.Mapper.TransactionRequestMapper;
 import com.isaacwallace.transaction_service.Mapper.TransactionResponseMapper;
 import com.isaacwallace.transaction_service.Presentation.Models.TransactionRequestModel;
@@ -158,10 +155,22 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     public TransactionResponseModel getMemberTransactionByTransactionId(String memberid, String transactionid) {
+        try {
+            UUID.fromString(transactionid);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidInputException("Invalid transactionid: " + transactionid);
+        }
+
+        try {
+            UUID.fromString(memberid);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidInputException("Invalid memberid: " + memberid);
+        }
+
         Transaction transaction = this.transactionRepository.findTransactionByMemberidAndTransactionIdentifier_Transactionid(memberid, transactionid);
 
         if (transaction == null) {
-            throw new NotFoundException("Unknown transaction id " + transactionid);
+            throw new NotFoundException("Unknown transactionid: " + transactionid);
         }
 
         return this.transactionResponseMapper.entityToResponseModel(transaction, inventoryServiceClient, membershipServiceClient, employeeServiceClient);
