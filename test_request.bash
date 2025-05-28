@@ -125,7 +125,7 @@ assertCurl() {
   local expected="$1" cmd="$2"
   local response status method url color
 
-  response=$(eval "$cmd -s -w '\n%{http_code}'")
+  response=$(eval "${cmd} -sS -w '\n%{http_code}'")
   status=$(echo "$response" | tail -n1)
 
   method=$(echo "$cmd" | grep -oE '\-X[[:space:]]+[A-Z]+' | awk '{print $2}')
@@ -150,6 +150,36 @@ assertCurl() {
   RESPONSE_BODY=$(echo "$response" | head -n -1)
 }
 
+assertEqual() {
+  local val1="$1"
+  local val2="$2"
+  local label="$3"
+
+  if [[ "$val1" != "$val2" ]]; then
+    echo -e "${RED}❌ Mismatch for '${label}': '$val1' != '$val2'${WHITE}"
+    exit 1
+  else
+    echo -e "${GREEN}✅ Match for '${label}': '$val1' == '$val2'${WHITE}"
+  fi
+}
+
+assertEqualFields() {
+  local original="$1"
+  local updated="$2"
+  shift 2
+  local fields=("$@")
+
+  if [[ ${#fields[@]} -eq 0 ]]; then
+    echo -e "${YELLOW}⚠️  No fields to validate. Skipping field comparison.${WHITE}"
+    return
+  fi
+
+  for field in "${fields[@]}"; do
+    local val1=$(echo "$original" | jq -r ".${field}")
+    local val2=$(echo "$updated" | jq -r ".${field}")
+    assertEqual "$val1" "$val2" "$field"
+  done
+}
 
 ID_KEY_FROM_URL() {
   local endpoint=$(basename "$1")
@@ -161,12 +191,50 @@ randomize_fields() {
   local fields=("$@")
   local result="$json"
 
+  RANDOMIZED_FIELDS=()
+
   for field in "${fields[@]}"; do
-    local value="test_$(date +%s%N | cut -c10-14)$RANDOM"
+    local value
+
+    if [[ "$field" == "email" ]]; then
+      local user="user$(date +%s%N | cut -c10-14)$RANDOM"
+      value="${user}@example.com"
+    else
+      value="test_$(date +%s%N | cut -c10-14)$RANDOM"
+    fi
+
+    RANDOMIZED_FIELDS+=("$field")
     result=$(echo "$result" | jq --arg val "$value" ".${field} = \$val")
   done
 
   echo "$result"
+}
+
+generate_invalid_payload() {
+  local json="$1"
+  shift
+  local fields=("$@")
+
+  for field in "${fields[@]}"; do
+    if [[ ! "$field" =~ [Ii][Dd] ]]; then
+      json=$(echo "$json" | jq "del(.${field})")
+      break
+    fi
+  done
+
+  json=$(echo "$json" | jq '
+    walk(
+      if type == "object" then
+        with_entries(select(.key | test("id"; "i") | not))
+      else
+        .
+      end
+    )
+  ')
+
+  json=$(echo "$json" | jq '.invalidField = "unexpected"')
+
+  echo "$json"
 }
 
 test_crud_operations() {
@@ -178,50 +246,63 @@ test_crud_operations() {
 
   echo -e "${CYAN}🔍 Testing $base_url${WHITE}"
 
-  # GET ALL
+  # GET
   assertCurl 200 "curl $base_url"
   local items="$RESPONSE_BODY"
   local count=$(echo "$items" | jq 'length')
   (( count == 0 )) && echo -e "${YELLOW}⚠️ No items. Skipping.${WHITE}" && return
-
-  local base_item=$(echo "$items" | jq '.[0]')
-  local id=$(echo "$base_item" | jq -r ".${id_key}")
-
-  # GET BY ID
-  assertCurl 200 "curl $base_url/$id"
-  local base_payload=$(echo "$RESPONSE_BODY")
-
-  # Prepare POST Payload
-  local post_payload=$(echo "$base_payload" | jq "del(.${id_key}, ._links?, .links?)")
-  if [[ -z "$post_payload" || "$post_payload" == "null" ]]; then
-    echo -e "${YELLOW}⚠️ Cannot generate valid POST payload for $base_url. Skipping.${WHITE}"
-    return
-  fi
-
-  # Randomize required fields
-  post_payload=$(randomize_fields "$post_payload" "${fields[@]}")
+  local base_template=$(echo "$items" | jq '.[0]')
+  local payload_template=$(echo "$base_template" | jq "del(.${id_key}, ._links?, .links?)")
 
   # POST
+  local post_payload=$(randomize_fields "$payload_template" "${fields[@]}")
   assertCurl 201 "curl -X POST -H 'Content-Type: application/json' -d '$post_payload' $base_url"
   local new_id=$(echo "$RESPONSE_BODY" | jq -r ".${id_key}")
+  local post_response="$RESPONSE_BODY"
 
-  # 409 CONFLICT
-  if [[ -n "$field_string" ]]; then
-    assertCurl 409 "curl -X POST -H 'Content-Type: application/json' -d '$post_payload' $base_url"
-  fi
+  # GET VALIDATION
+  assertCurl 200 "curl $base_url/$new_id"
+  local created_payload="$RESPONSE_BODY"
+  assertEqualFields "$post_payload" "$created_payload" "${fields[@]}"
 
-  # PUT (randomize again)
+  # PUT
   local put_payload=$(randomize_fields "$post_payload" "${fields[@]}")
   assertCurl 200 "curl -X PUT -H 'Content-Type: application/json' -d '$put_payload' $base_url/$new_id"
+  assertCurl 200 "curl $base_url/$new_id"
+  local updated_payload="$RESPONSE_BODY"
+  assertEqualFields "$put_payload" "$updated_payload" "${fields[@]}"
 
   # DELETE
   assertCurl 204 "curl -X DELETE $base_url/$new_id"
 
-  # 404 Not Found
-  assertCurl 404 "curl $base_url/$new_id"
+  local deleted_id="$new_id"
 
-  # 422 Unprocessable Entity
+  # POST FOR NEGATIVE TESTS (The dummy in question O~O)
+  local second_payload=$(randomize_fields "$payload_template" "${fields[@]}")
+  assertCurl 201 "curl -X POST -H 'Content-Type: application/json' -d '$second_payload' $base_url"
+  local second_id=$(echo "$RESPONSE_BODY" | jq -r ".${id_key}")
+
+  # 409 CONFLICT
+  if [[ -n "$field_string" ]]; then
+    assertCurl 409 "curl -X POST -H 'Content-Type: application/json' -d '$second_payload' $base_url"
+  fi
+
+  # 404 NOT FOUND
+  assertCurl 404 "curl $base_url/$deleted_id"
+  assertCurl 404 "curl -X PUT -H 'Content-Type: application/json' -d '$second_payload' $base_url/$deleted_id"
+  assertCurl 404 "curl -X DELETE $base_url/$deleted_id"
+
+  # 422 Invalid ID
   assertCurl 422 "curl $base_url/invalid-id"
+  assertCurl 422 "curl -X PUT -H 'Content-Type: application/json' -d '$second_payload' $base_url/invalid-id"
+  assertCurl 422 "curl -X DELETE $base_url/invalid-id"
+
+  # 422 Invalid payloads
+  local invalid_post=$(generate_invalid_payload "$second_payload" "${fields[@]}")
+  assertCurl 422 "curl -X POST -H 'Content-Type: application/json' -d '$invalid_post' $base_url"
+
+  local invalid_put=$(generate_invalid_payload "$second_payload" "${fields[@]}")
+  assertCurl 422 "curl -X PUT -H 'Content-Type: application/json' -d '$invalid_put' $base_url/$second_id"
 
   echo -e "${GREEN}✅ Endpoint tests passed for $base_url${WHITE}\n"
 }
